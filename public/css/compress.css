@@ -1,0 +1,106 @@
+.image-comparison-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Adjust as needed */
+    height: 500px; /* Adjust as needed */
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.comparison-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+#compressedImage {
+    z-index: 2;
+}
+
+.slider-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background-color: #000;
+    cursor: ew-resize;
+    z-index: 3;
+}
+
+.slider-handle {
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    /* border: 2px solid #000; */
+    border-radius: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    cursor: pointer;
+}
+
+/*loader*/
+
+#loaderOverlay {
+    position: fixed; /* Ensures it covers the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Transparent black background */
+    z-index: 9999; /* Place it above all other elements */
+    display: none; /* Initially hidden */
+    align-items: center;
+    justify-content: center;
+}
+
+#loaderSpinner {
+    border: 8px solid #f3f3f3; /* Light gray border */
+    border-top: 8px solid #3498db; /* Blue color for the spinner */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Heading Title Styling */
+.heading-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+}
+
+/* Sub-headings for Comparison */
+.sub-heading {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 10px;
+}

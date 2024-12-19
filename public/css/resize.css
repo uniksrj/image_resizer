@@ -1,0 +1,225 @@
+
+/* Hero Section Styling */
+.hero-section {
+    background: linear-gradient(to bottom left, #26bb49, #ffffff); /* Green to White Gradient */
+    color: #333; /* Neutral text color for contrast */
+    padding: 100px 20px;
+    text-align: center;
+    height: 100vh;
+    max-height: 530px;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff; /* Deep Green */
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #ffffff;
+    text-shadow: 2px 3px 6px rgba(1, 3, 1, 0.4);
+    letter-spacing: 0.3px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-transform: capitalize;
+}
+
+.hero-btn {
+    background-color: #ffd700; /* Gold */
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.hero-btn:hover {
+    background-color: #e6c200; /* Darker Gold */
+    text-decoration: none;
+}
+
+/* Upload Section */
+.uploadOuter {
+    margin-top: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
+.uploadOuter .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #155724; /* Deep Green */
+    color: #fff;
+    border: none;
+}
+
+.uploadOuter strong {
+    font-size: 1.2rem;
+    margin: 0 10px;
+    color: #333; /* Neutral color for balance */
+}
+
+.dragBox {
+    display: inline-block;
+    padding: 15px 20px;
+    border: 2px dashed #ffd700; /* Gold Border */
+    border-radius: 5px;
+    color: #666; /* Muted Text */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dragBox:hover {
+    background-color: rgba(255, 215, 0, 0.1); /* Light Gold Hover */
+}
+
+.dragBox input[type="file"] {
+    display: none; /* Hide the file input */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .hero-btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    .dragBox {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+}
+
+
+  #preview {
+    text-align: center;
+    img {
+      max-width: 100%
+    }
+  }
+
+  /*Loader photos css*/
+
+  #progressContainer {
+    margin: 20px auto;
+    width: 40%;
+    text-align: center;
+}
+
+#uploadProgressBar {
+    height: 20px;
+    background: linear-gradient(to right, #28a745, #218838);
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#progressText {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/*error message*/
+#errorMessage {
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    margin-top: 10px;
+}
+
+/*Resize image*/
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Flexbox container to align image and form side by side */
+.resize-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Image Section */
+.image-section {
+    flex: 1;
+    max-width: 45%;
+    text-align: center;
+}
+
+.image-section img {
+    width: 100%; /* Make image responsive but not covering the whole container */
+    max-width: 600px; /* Limit the max width */
+    height: auto;
+}
+
+/* Form Section */
+.form-section {
+    flex: 1;
+    max-width: 45%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.form-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.form-section input,
+.form-section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-section button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-section button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .resize-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-section, .form-section {
+        max-width: 100%;
+    }
+}
