@@ -64,3 +64,8 @@ Route::get('/secure-comp-image/{filename}', function ($filename) {
     return response()->file($filePath);
 })->name('secure.Compimage');
 Route::post('/save-compressed-image', [CompressImage::class, 'saveCompressImage']);
+
+
+//Delete file//
+
+Route::post('/delete-image', [CompressImage::class, "deletefile"]);

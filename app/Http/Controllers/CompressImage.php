@@ -72,4 +72,21 @@ class CompressImage extends Controller
     
         return response()->json(['success' => false, 'message' => 'File upload failed.'], 500);
     }
+
+    public function deletefile(Request $request){       
+        $request->validate([
+            'filename' => 'required|string',
+        ]);
+    
+        $filename = $request->input('filename');
+    
+        $filePath = "uploads/".$filename;
+    
+        if (Storage::exists($filePath)) {
+            Storage::delete($filePath);
+            return response()->json(['status' => 1, 'success' => 'File deleted successfully.']);
+        } else {
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+    }
 }
