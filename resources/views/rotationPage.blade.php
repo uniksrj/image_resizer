@@ -25,7 +25,7 @@
                     </h4>
                     <div class="flex items-center justify-center ">
                         <label class="w-11/12">
-                            <input type="file" hidden />
+                            <input type="file" ondragover="drag()" ondrop="drop()" id="uploadFile" hidden />
                             <div class="flex w-full h-9 px-2 bg-gold rounded-lg text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
                                 style="background-color: #FFBF00;">
                                 <span class="text-lg font-bold " style="color: #FFFFFF">Choose File</span>
@@ -59,21 +59,23 @@
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Straighten</h2>
                 <div class="relative">
                     <!-- Slider -->
-                    <input type="range" min="0" max="100" step="1"
-                        id="colorSlider" 
-                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        oninput="updateSliderColor()">
+                    <input type="range" min="0" max="100" step="1" id="colorSlider" 
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    oninput="updateSliderColor()">
                 </div>
                 <span class="block text-gray-400 py-2">Rotate image in any angle</span>
             </div>
-            
+
             <div class="w-full shadow rounded-lg my-3">
-                <button class="w-full h-10 bg-white rounded-lg cursor-pointer mt-4 text-black" onclick="resetSlider()">Reset</button>
-            </div>            
+                <button class="w-full h-10 bg-white rounded-lg cursor-pointer mt-4 text-black"
+                    onclick="resetSlider()">Reset</button>
+            </div>
             <hr class=" border-3">
             <div class="w-full shadow rounded-lg my-8">
-                <button class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold" onclick="processImage()">Process Image</button>
-            </div> 
+                <button
+                    class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold"
+                    onclick="processImage()">Process Image</button>
+            </div>
         </aside>
 
         <!-- Main Content -->
@@ -82,7 +84,7 @@
             <p>This is where the main content will go.</p>
         </main>
     </div>
-    <script type="module" src="{{ asset('js/rotate.js') }}"></script>
+    <script src="{{ asset('js/rotate.js') }}" defer></script>
 @endsection
 
 @section('title')
