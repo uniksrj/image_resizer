@@ -10,11 +10,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/navStyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/resize.css') }}">
-    @vite('resources/js/app.js')
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
 </head>
+
+<style>
+    body {
+        font-family: "Roboto Slab", serif;
+        /* font-optical-sizing: auto; */
+        font-weight: 400;
+        font-style: normal;
+    }
+</style>
 
 <body>
     @if ($errors->any())
@@ -28,7 +46,8 @@
     @endif
     <nav class="navbar">
         <div class="logo">
-            <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;" src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
+            <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;"
+                    src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
         </div>
         <div class="menu-toggle" id="mobile-menu">
             <span class="bar"></span>
@@ -39,7 +58,16 @@
             <li><a href="{{ route('home') }}">Image Resizer</a></li>
             <li><a href="{{ route('crop_image') }}">Crop Image</a></li>
             <li><a href="{{ route('compress_image') }}">Image Compressor</a></li>
-            <li><a href="#bulk-resize">Bulk Resize</a></li>
+            <li class="dropdown">
+                <button class="dropbtn" onclick="showDropdown(event)">More
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{{ route('tool-view/1') }}">Rotate Image</a>
+                    <a href="#">Flip Image</a>
+                    <a href="#">Meme Generator</a>
+                </div>
+            </li>
         </ul>
     </nav>
 
@@ -114,9 +142,22 @@
                 <p class="mb-0">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
             </div>
         </div>
-    </footer>    
-   
+    </footer>
+
     <script type="module" src="{{ asset('js/nav.js') }}"></script>
+    <script>
+        function showDropdown(event) {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function(e) {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            if (!e.target.matches('.dropbtn')) {
+                dropdownContent.style.display = 'none';
+            }
+        };
+    </script>
 </body>
 
 </html>
