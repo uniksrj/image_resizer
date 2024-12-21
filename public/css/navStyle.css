@@ -14,7 +14,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 14px 40px;
   background-color: #198754;
   color: #fff;
 }
@@ -61,6 +61,7 @@ a {
 .navbar a:hover,
 .dropdown:hover .dropbtn {
   background-color: #369c4c;
+  border-radius: 0;
 }
 
 .dropdown-content {
@@ -68,11 +69,11 @@ a {
   position: absolute;
   background-color: #198754;
   top: 52px;
-  left: -76px;
+  left: -176px;
   right: 0;
   opacity: 1;
   visibility: visible;
-  min-width: 160px;
+  min-width: 260px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 100000;
 }
@@ -87,7 +88,12 @@ a {
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  text-align: left;
+  text-align: left;  
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-content a:last-child {
+  border-bottom: none;
 }
 
 .dropdown-content a:hover {

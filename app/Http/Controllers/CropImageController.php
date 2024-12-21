@@ -80,4 +80,10 @@ class CropImageController extends Controller
             'redirectUrl' => route('download_page', ['filename' => $croppedImagePath]),
         ]);
     } 
+
+    //Rotation Page
+
+    public function rotationview(){
+        return view('rotationPage');
+    }
 }

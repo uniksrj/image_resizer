@@ -69,3 +69,11 @@ Route::post('/save-compressed-image', [CompressImage::class, 'saveCompressImage'
 //Delete file//
 
 Route::post('/delete-image', [CompressImage::class, "deletefile"]);
+
+//Delete file end//
+
+/* Rotation Page */
+
+Route::get('/rotation-view', [CropImageController::class, "rotationview"])->name('tool-view/1');
+// Route::get('/flip-view', [CropImageController::class, "flip-view"])->name('tool-view/2');
+// Route::get('/meme-view', [CropImageController::class, "meme-view"])->name('tool-view/3');
