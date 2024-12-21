@@ -28,7 +28,8 @@
     @endif
     <nav class="navbar">
         <div class="logo">
-            <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;" src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
+            <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;"
+                    src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
         </div>
         <div class="menu-toggle" id="mobile-menu">
             <span class="bar"></span>
@@ -39,7 +40,16 @@
             <li><a href="{{ route('home') }}">Image Resizer</a></li>
             <li><a href="{{ route('crop_image') }}">Crop Image</a></li>
             <li><a href="{{ route('compress_image') }}">Image Compressor</a></li>
-            <li><a href="#bulk-resize">Bulk Resize</a></li>
+            <li class="dropdown">
+                <button class="dropbtn" onclick="showDropdown(event)">More
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </li>
         </ul>
     </nav>
 
@@ -114,9 +124,22 @@
                 <p class="mb-0">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
             </div>
         </div>
-    </footer>    
-   
+    </footer>
+
     <script type="module" src="{{ asset('js/nav.js') }}"></script>
+    <script>
+        function showDropdown(event) {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function(e) {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            if (!e.target.matches('.dropbtn')) {
+                dropdownContent.style.display = 'none';
+            }
+        };
+    </script>
 </body>
 
 </html>

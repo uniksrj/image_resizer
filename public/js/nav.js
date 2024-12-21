@@ -27,6 +27,7 @@ if (document.getElementById('reviewForm') && document.getElementById('reviewsDis
     });
 }
 
+
 function drag() {
     document.getElementById('uploadFile').parentNode.className = 'draging dragBox';
 }
@@ -40,3 +41,5 @@ const navList = document.querySelector('.nav-list');
 mobileMenu.addEventListener('click', () => {
     navList.classList.toggle('show');
 });
+
+
