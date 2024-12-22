@@ -86,4 +86,24 @@ class CropImageController extends Controller
     public function rotationview(){
         return view('rotationPage');
     }
+
+    public function save_image(Request $request){
+        $validated = $request->validate([
+            'image' => 'required|file|mimes:jpeg,png,jpg|max:10240', 
+        ]);
+
+        $directory = 'uploads/rotate_image';
+        $storagePath = storage_path('app/' . $directory);
+    
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0777, true);
+        }
+
+        $path = $request->file('image')->store($directory, 'public');
+
+        $filename = basename($path);
+
+        return response()->json(['success' => true, 'path' => asset('storage/uploads/rotate_image/'.$filename)]);
+
+    }
 }
