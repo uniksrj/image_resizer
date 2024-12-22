@@ -6,3 +6,47 @@
         width: 100%;
     }
 }
+/* Custom property for slider value percentage */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 12px;
+    background: linear-gradient(90deg, #007bff 0%, #007bff var(--slider-value), #e0e0e0 var(--slider-value), #e0e0e0 100%);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;  /* Set a smaller size for the thumb */
+    height: 12px;
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 12px;  /* Smaller thumb size for Firefox */
+    height: 12px;
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Default slider value for initial state */
+#colorSlider {
+    background: linear-gradient(
+        to right,
+        var(--slider-color-left, hsl(0, 100%, 50%)) 0%,
+        var(--slider-color-right, hsl(360, 100%, 50%)) 100%
+    );
+}
+
+
+#progressBar {
+    transition: width 0.3s ease-in-out;
+}

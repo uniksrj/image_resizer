@@ -2,9 +2,9 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/rotate.css') }}">
-    <div class="container mx-auto min-h-screen flex flex-col md:flex-row py-0">
+    <div class="container mx-auto min-h-[992px] max-h-[992px] flex flex-col md:flex-row py-0">
         <!-- Sidebar -->
-        <aside class="w-full md:w-1/4 bg-green-300 text-white min-h-screen p-2">
+        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white min-h-screen p-2">
             <div class="block w-full pt-3">
                 <h4 class="text-2xl sans font-bold">Rotate Image</h4>
             </div>
@@ -20,33 +20,43 @@
                     </svg>
                 </div>
                 <div class="grid gap-2">
-                    <h4 class="text-center font-lg text-sm font-medium leading-snug ">
-                        Drag and Drop your file here or
-                    </h4>
-                    <div class="flex items-center justify-center ">
-                        <label class="w-11/12">
-                            <input type="file" hidden />
-                            <div class="flex w-full h-9 px-2 bg-gold rounded-lg text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
-                                style="background-color: #FFBF00;">
-                                <span class="text-lg font-bold " style="color: #FFFFFF">Choose File</span>
-                            </div>
-                        </label>
+                    <div id="dropZone" class="w-full flex items-center justify-center" ondragover="dragOver(event)"
+                        ondragleave="dragLeave(event)" ondrop="handleDrop(event)">
+                        <div class="text-center">
+                            <label class="w-full cursor-pointer">
+                                <input type="file" id="uploadFile" hidden  onchange="handleFileChange(event)"/>
+                                <div class="flex w-full h-9 px-2 bg-gold rounded-lg text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
+                                    style="background-color: #FFBF00;" >
+                                    <span id="dropZoneText" class="text-lg font-bold" style="color: #FFFFFF">Choose
+                                        File</span>
+                                </div>
+                            </label>
+                            <p class="mt-2 text-sm text-gray-500">or drag a file into this area</p>
+                        </div>
+                    </div>
+                    <div id="progressLoadingImg" class="flex flex-col mt-2 w-full hidden">
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-gray-200 rounded-lg h-2">
+                            <div id="progressBar" class="h-2 bg-blue-500 rounded-lg" style="width: 0%;"></div>
+                        </div>
+                        <!-- Progress Text -->
+                        <span id="progressText" class="text-sm text-gray-500 text-center mt-2">0% Uploaded</span>
                     </div>
                 </div>
             </div> <!-- Buttons Container -->
-            <div class="w-full justify-center flex gap-2.5">
-                <div class="w-2/5 h-max border bg-white justify-center flex shadow space-x-6">
+            <div class="w-full justify-center flex gap-7">
+                <div class="w-5/12 h-max border rounded-md bg-white justify-center flex shadow-sm space-x-6">
                     <button id="rotateRight" class="w-24 h-24 text-black flex items-center justify-center">
                         <i class="fa-solid fa-rotate-right text-4xl"></i>
                     </button>
                 </div>
-                <div class=" w-2/5 h-max bg-white border shadow justify-center flex space-x-6 ">
+                <div class=" w-5/12 h-max bg-white rounded-md border shadow-sm justify-center flex space-x-6 ">
                     <button id="rotateLeft" class="w-24 h-24 text-black flex items-center justify-center ">
                         <i class="fa-solid fa-rotate-left text-4xl"></i>
                     </button>
                 </div>
             </div>
-            <div class="w-full justify-center flex gap-2.5">
+            <div class="w-full justify-center flex gap-7">
                 <div class="w-2/5 h-max justify-center flex space-x-6 my-2">
                     <span class="text-sm justify-center font-bold text-shadow-lg text-black">clock wise</span>
                 </div>
@@ -57,32 +67,49 @@
 
             <div class="w-full p-6 bg-white shadow rounded-lg my-3">
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Straighten</h2>
-                <div class="relative">
+                <div class="relative flex gap-2 items-center">
                     <!-- Slider -->
-                    <input type="range" min="0" max="100" step="1"
-                        id="colorSlider" 
-                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        oninput="updateSliderColor()">
+                    <input type="range"  min="-360" max="360" step="1" id="colorSlider"
+                        class="w-10/12 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        ><span id="degree" class="text-black">0&deg;</span>
                 </div>
-                <span class="block text-gray-400 py-2">Rotate image in any angle</span>
+                <span class="text-xs block text-gray-400 py-2">Rotate image in any angle</span>
             </div>
-            
+
             <div class="w-full shadow rounded-lg my-3">
-                <button class="w-full h-10 bg-white rounded-lg cursor-pointer mt-4 text-black" onclick="resetSlider()">Reset</button>
-            </div>            
+                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer mt-4 text-black"
+                    >Reset</button>
+            </div>
             <hr class=" border-3">
             <div class="w-full shadow rounded-lg my-8">
-                <button class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold" onclick="processImage()">Process Image</button>
-            </div> 
+                <button
+                    class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold"
+                    onclick="processImage()">Process Image</button>
+            </div>
         </aside>
 
+
+
         <!-- Main Content -->
-        <main class="w-full md:w-3/4 bg-white p-6">
-            <h1 class="text-2xl font-bold">Welcome to the Main Section</h1>
-            <p>This is where the main content will go.</p>
+        <main class="w-full  md:w-3/4 bg-white shadow">
+            <div class="w-full h-28 border-b-2 p-6">
+                <div></div>
+            </div>
+            <div class="w-full min-h-[736px] max-h-[736px]">
+                <div class="flex justify-center max-h-[680px]">
+                    <span id="dynamic_img" class="p-8">
+                        <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
+                            class="object-contain max-w-full max-h max-h-[680px]">
+                    </span>
+                </div>
+            </div>
+            <div class="w-full h-28 border-t-2 p-6">
+                <div></div>
+            </div>
         </main>
     </div>
-    <script type="module" src="{{ asset('js/rotate.js') }}"></script>
+    <script type="module" src="{{ asset('js/rotate.js') }}" ></script>
+    {{-- defer --}}
 @endsection
 
 @section('title')
