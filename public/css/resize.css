@@ -1,7 +1,8 @@
 
 /* Hero Section Styling */
 .hero-section {
-    background: linear-gradient(to bottom left, #26bb49, #ffffff); /* Green to White Gradient */
+    background-color: #26bb49;
+    /* background: linear-gradient(to bottom left, #26bb49, #ffffff); */
     color: #333; /* Neutral text color for contrast */
     padding: 100px 20px;
     text-align: center;
@@ -69,7 +70,7 @@
     padding: 15px 20px;
     border: 2px dashed #ffd700; /* Gold Border */
     border-radius: 5px;
-    color: #666; /* Muted Text */
+    color: #ffffff; /* Muted Text */
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;

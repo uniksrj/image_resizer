@@ -69,7 +69,7 @@
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Straighten</h2>
                 <div class="relative flex gap-2 items-center">
                     <!-- Slider -->
-                    <input type="range"  min="-360" max="360" step="1" id="colorSlider"
+                    <input type="range"  min="-45" max="45" step="1" id="colorSlider"
                         class="w-10/12 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                         ><span id="degree" class="text-black">0&deg;</span>
                 </div>
@@ -96,10 +96,10 @@
                 <div></div>
             </div>
             <div class="w-full min-h-[736px] max-h-[736px]">
-                <div class="flex justify-center max-h-[680px]">
+                <div class="flex justify-center items-center w-[1084px] h-[680px] overflow-hidden bg-gray-100">
                     <span id="dynamic_img" class="p-8">
                         <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
-                            class="object-contain max-w-full max-h max-h-[680px]">
+                            class="object-contain max-w-full max-h-full">
                     </span>
                 </div>
             </div>

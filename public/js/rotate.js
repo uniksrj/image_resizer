@@ -1,27 +1,119 @@
 var $image = $('#uploadedImage');
-
 function initializeCropper(imageElement) {
     if (window.cropper) {
         window.cropper.destroy();
     }
     window.cropper = new Cropper(imageElement, {
-        aspectRatio: 1,
-        viewMode: 1,
-        cropBoxResizable: true,
-        autoCropArea: 1,
+        viewMode: 2,
+        background: false,
+        autoCrop: false,
+        cropBoxResizable: false,
+        cropBoxMovable: false,
+        dragMode: 'none',
+        responsive: false,
+        zoomable: false,
+        zoomOnTouch: false,
         ready: function () {
-            cropper.setCropBoxData({
-                width: cropper.getImageData().width,
-                height: cropper.getImageData().height
-            });
-        }
+            fitImageToContainer();
+        },
     });
 }
+function fitImageToContainer() {
+    if (window.cropper) {
+        const containerData = cropper.getContainerData();
+        const imageData = cropper.getImageData();
+
+        // Calculate scaling to fit the container
+        const scaleX = containerData.width / imageData.naturalWidth;
+        const scaleY = containerData.height / imageData.naturalHeight;
+        const scale = Math.min(scaleX, scaleY);
+
+        // Prevent the canvas from exceeding the container
+        cropper.setCanvasData({
+            left: 0,
+            top: 0,
+            width: containerData.width,
+            height: containerData.height * scale, // Scale height proportionally
+        });
+    }
+}
+
+/*
+function adjustCanvasAfterRotation() {
+    const imageData = cropper.getImageData();
+    const canvasData = cropper.getCanvasData();
+    const containerData = cropper.getContainerData();
+    console.log(containerData);
+    console.log(imageData);
+    
+
+      const scale = Math.min(
+        containerData.width / imageData.naturalWidth,
+        containerData.height / imageData.naturalHeight
+    );
+
+    cropper.setCanvasData({
+        left: (containerData.width - imageData.naturalWidth * scale) / 2,
+        top: (containerData.height - imageData.naturalHeight * scale) / 2,
+        width: imageData.naturalWidth * scale,
+        height: imageData.naturalHeight * scale,
+    });
+
+    const rotatedWidth = Math.abs(
+        imageData.width * Math.cos(imageData.rotate * (Math.PI / 180)) +
+        imageData.height * Math.sin(imageData.rotate * (Math.PI / 180))
+    );
+    const rotatedHeight = Math.abs(
+        imageData.width * Math.sin(imageData.rotate * (Math.PI / 180)) +
+        imageData.height * Math.cos(imageData.rotate * (Math.PI / 180))
+    );
+
+    cropper.setCanvasData({
+        left: (containerData.width - rotatedWidth) / 2,
+        top: (containerData.height - rotatedHeight) / 2,
+        width: rotatedWidth,
+        height: rotatedHeight,
+    });
+    
+}*/
+
+/*
+// Function to fit image within the container without cropping
+function fitImageToContainer() {
+    if (window.cropper) {
+        const containerData = cropper.getContainerData();
+        const imageData = cropper.getImageData();
+
+        // Calculate the scale needed to fit the image within container
+        const scale = Math.min(
+            containerData.width / imageData.naturalWidth,
+            containerData.height / imageData.naturalHeight
+        );
+
+        cropper.setCanvasData({
+            left: (containerData.width - imageData.naturalWidth * scale) / 2,
+            top: (containerData.height - imageData.naturalHeight * scale) / 2,
+            width: imageData.naturalWidth * scale,
+            height: imageData.naturalHeight * scale,
+        });
+
+        // Ensure the image fits without cropping when rotated 180 degrees
+        if (imageData.rotate % 180 === 0) {
+            cropper.setCanvasData({
+                left: (containerData.width - imageData.naturalWidth * scale) / 2,
+                top: (containerData.height - imageData.naturalHeight * scale) / 2,
+                width: containerData.width,
+                height: containerData.height,
+            });
+        }
+    }
+} */
 
 function bindRotateEvents() {
     $('#rotateLeft').off('click').on('click', function () {
         if (window.cropper) {
             window.cropper.rotate(-90);
+            fitImageToContainer()
         } else {
             alert('Cropper is not initialized.');
         }
@@ -30,6 +122,7 @@ function bindRotateEvents() {
     $('#rotateRight').off('click').on('click', function () {
         if (window.cropper) {
             window.cropper.rotate(90);
+            fitImageToContainer()
         } else {
             alert('Cropper is not initialized.');
         }
@@ -47,21 +140,21 @@ function bindRotateEvents() {
     $('#colorSlider').on('input', function () {
         var angle = $(this).val();
         // Ensure the slider ranges from -360 to 360
-        if (angle < -360) {
-            angle += 360;
-        } else if (angle > 360) {
-            angle -= 360;
+        if (angle < -45) {
+            angle += 45;
+        } else if (angle > 45) {
+            angle -= 45;
         }
 
         // Straighten image to the specified angle
         $('#degree').html(`${angle} &deg;`);
         cropper.rotateTo(angle);
-       // Calculate the percentage position of the slider
-       let percent = (angle / 360) * 100;
+        // Calculate the percentage position of the slider
+        let percent = (angle / 45) * 100;
 
-       // Update slider color gradient based on the position
-       this.style.setProperty('--slider-color-left', `hsl(${180 - percent}, 100%, 50%)`);
-       this.style.setProperty('--slider-color-right', `hsl(${180 + percent}, 100%, 50%)`);
+        // Update slider color gradient based on the position
+        this.style.setProperty('--slider-color-left', `hsl(${180 - percent}, 100%, 50%)`);
+        this.style.setProperty('--slider-color-right', `hsl(${180 + percent}, 100%, 50%)`);
     });
 }
 
@@ -107,12 +200,13 @@ function uploadImage(files) {
         },
         success: function (response) {
             // Replace the image inside #dynamic_img
-            $('#dynamic_img').html(`<img id="uploadedImage" src="${response.path}" alt="Uploaded Image" class="max-w-full max-h  max-h-[680px] object-contain" />`);
+            $('#dynamic_img').html(`<img id="uploadedImage" src="${response.path}" alt="Uploaded Image" class="max-w-full  max-h-[680px] object-contain" />`);
             $('#progressLoadingImg').addClass('hidden'); // Hide loader
 
             const $image = $('#uploadedImage');
             console.log($image);
             initializeCropper($image[0]);
+
         },
         error: function () {
             alert('Error uploading file. Please try again.');
@@ -121,10 +215,29 @@ function uploadImage(files) {
     });
 }
 
+// function fitImageToContainer() {
+//     const containerData = cropper.getContainerData();
+//     const imageData = cropper.getImageData();
+
+//     // Calculate scale to fit the image within the container
+//     const scaleX = containerData.width / imageData.naturalWidth;
+//     const scaleY = containerData.height / imageData.naturalHeight;
+//     const scale = Math.min(scaleX, scaleY);
+
+//     cropper.zoomTo(scale);
+// }
+
 
 $(document).ready(function () {
     bindRotateEvents()
+
+    window.addEventListener('resize', () => {
+        if (window.cropper) {
+            fitImageToContainer();
+        }
+    });
     // bindStraightenSlider()
+
     let cropper = null;
     // Drag and Drop Handlers   
     $('#dropZone').on('dragover', function (e) {
@@ -184,24 +297,6 @@ $(document).ready(function () {
     } else {
         console.error('Image element not found.');
     }
-
-    // $('#rotateLeft').on('click', function () {
-    //     cropper.rotate(-90);
-    // });
-    // // Rotate Right Button
-    // $('#rotateRight').on('click', function () {
-    //     cropper.rotate(90);
-    // });
-
-    // // Straighten Slider
-    // $('#colorSlider').on('input', function () {  
-    //     var value = $(this).val();      
-    //     $(this).style.setProperty('--slider-value', value + '%');        
-    //     cropper.setCropBoxData({
-    //         width: cropper.getImageData().width + value,
-    //         height: cropper.getImageData().height + value
-    //     });
-    // });
 });
 
 
