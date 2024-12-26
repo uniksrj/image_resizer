@@ -215,20 +215,91 @@ function uploadImage(files) {
     });
 }
 
-// function fitImageToContainer() {
-//     const containerData = cropper.getContainerData();
-//     const imageData = cropper.getImageData();
+function processImage() {
+    let my_image = $('#uploadedImage').src;
+    if (!cropper) {
+        console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
+        return;
+    }
 
-//     // Calculate scale to fit the image within the container
-//     const scaleX = containerData.width / imageData.naturalWidth;
-//     const scaleY = containerData.height / imageData.naturalHeight;
-//     const scale = Math.min(scaleX, scaleY);
+    const rotateRight = parseFloat($('#rotateRight').val()) || 0;
+    const rotateLeft = parseFloat($('#rotateLeft').val()) || 0;
+    const straighten = parseFloat($('#colorSlider').val()) || 0;
 
-//     cropper.zoomTo(scale);
-// }
+    // Log the values for debugging
+    console.log("Straighten Value:", straighten);
+    console.log("Rotate Left Value:", rotateLeft);
+    console.log("Rotate Right Value:", rotateRight);
 
+    // Calculate total rotation
+    const rotation = rotateRight - rotateLeft;
+
+    // Apply transformations
+    try {
+    cropper.rotateTo(rotation);
+
+    // Straighten the image (simulating shear/skew effect)
+    const canvas = cropper.getCroppedCanvas();
+    if (straighten !== 0 && canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(1, straighten / 100, straighten / 100, 1, 0, 0);
+        ctx.drawImage(canvas, 0, 0);
+    }
+    
+    const relativePath = src.replace(location.origin, '');
+    const extension = relativePath.split('.').pop().toLowerCase();
+    // const link = new URL($image.src);
+    // const pathname = link.pathname;
+    // const extension = pathname.split('.').pop().toLowerCase();
+    cropper.getCroppedCanvas().toBlob(function (blob) {
+        const formData = new FormData();
+        formData.append('rotateImage', blob, `rotate-image.${extension}`);
+        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+        $.ajax({
+            url: '/save-rotate-image',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data.status === 'success') {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/download-page';
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                    const filenameInput = document.createElement('input');
+                    filenameInput.type = 'hidden';
+                    filenameInput.name = 'filename';
+                    filenameInput.value = data.filename;
+                    form.appendChild(filenameInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            },
+            error: function (err) {
+                console.error(err);
+            }
+        })
+    })
+
+    // $image
+    } catch (error) {
+        console.error("Error applying transformations:", error);
+    }
+}
 
 $(document).ready(function () {
+
+    $(document).on('click', '#process_data', function () {
+        processImage();
+    });
     bindRotateEvents()
 
     window.addEventListener('resize', () => {

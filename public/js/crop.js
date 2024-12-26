@@ -152,14 +152,6 @@ $(document).ready(function () {
         const scaleX = parseFloat($('#crop-scale-x').val());
         const scaleY = parseFloat($('#crop-scale-y').val());
 
-        console.log(x);
-        console.log(y);
-        console.log(width);
-        console.log(height);
-        console.log(scaleX);
-        console.log(scaleY);
-
-
         // Set Cropper Data
         cropper.setData({ x, y, width, height });
         cropper.rotateTo(rotate);

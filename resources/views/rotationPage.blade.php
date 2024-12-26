@@ -82,12 +82,11 @@
             </div>
             <hr class=" border-3">
             <div class="w-full shadow rounded-lg my-8">
-                <button
-                    class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold"
-                    onclick="processImage()">Process Image</button>
+                <button class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold" id="process_data">Process Image</button>
             </div>
         </aside>
 
+        
 
 
         <!-- Main Content -->
