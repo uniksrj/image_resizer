@@ -226,15 +226,12 @@ function processImage() {
     const rotateLeft = parseFloat($('#rotateLeft').val()) || 0;
     const straighten = parseFloat($('#colorSlider').val()) || 0;
 
-    // Log the values for debugging
     console.log("Straighten Value:", straighten);
     console.log("Rotate Left Value:", rotateLeft);
     console.log("Rotate Right Value:", rotateRight);
 
-    // Calculate total rotation
     const rotation = rotateRight - rotateLeft;
 
-    // Apply transformations
     try {
     cropper.rotateTo(rotation);
 
@@ -248,9 +245,6 @@ function processImage() {
     
     const relativePath = src.replace(location.origin, '');
     const extension = relativePath.split('.').pop().toLowerCase();
-    // const link = new URL($image.src);
-    // const pathname = link.pathname;
-    // const extension = pathname.split('.').pop().toLowerCase();
     cropper.getCroppedCanvas().toBlob(function (blob) {
         const formData = new FormData();
         formData.append('rotateImage', blob, `rotate-image.${extension}`);
