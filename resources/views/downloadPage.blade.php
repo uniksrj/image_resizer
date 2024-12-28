@@ -51,6 +51,8 @@
         }
     </style>
     @php
+    // echo $filename;
+    // return;
         $myfile = explode('/', $filename);
         if ($myfile[0] == 'resized') {
             $heading = 'Your resized image is ready to download!';
@@ -58,11 +60,13 @@
             $heading = 'Your Croped image is ready to download!';
         } elseif ($myfile[0] == 'compressed_image') {
             $heading = 'Your Compressed image is ready to download!';
+        }elseif ($myfile[0] == 'rotate_images') {
+            $heading = 'Your Rotate image is ready to download!';
         }
     @endphp
     <div style="text-align: center; padding: 50px;">
         <h1 class="d-head">{{ $heading }}</h1>
-        <div class="container">
+        <div class="container flex justify-center items-center">
             <img class="d-image" src="{{ asset('storage/uploads/' . $filename) }}" alt="Resized Image"
                 style="max-width: 20%; height: auto; margin-bottom: 20px;">
         </div>

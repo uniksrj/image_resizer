@@ -159,6 +159,7 @@ function bindRotateEvents() {
 }
 
 function uploadImage(files) {
+    $image = ''; 
     if (!files || files.length === 0) {
         alert('No file selected.');
         return;
@@ -203,7 +204,7 @@ function uploadImage(files) {
             $('#dynamic_img').html(`<img id="uploadedImage" src="${response.path}" alt="Uploaded Image" class="max-w-full  max-h-[680px] object-contain" />`);
             $('#progressLoadingImg').addClass('hidden'); // Hide loader
 
-            const $image = $('#uploadedImage');
+            $image = $('#uploadedImage');
             console.log($image);
             initializeCropper($image[0]);
 
@@ -216,7 +217,6 @@ function uploadImage(files) {
 }
 
 function processImage() {
-    let my_image = $('#uploadedImage').src;
     if (!cropper) {
         console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
         return;
@@ -226,26 +226,29 @@ function processImage() {
     const rotateLeft = parseFloat($('#rotateLeft').val()) || 0;
     const straighten = parseFloat($('#colorSlider').val()) || 0;
 
-    console.log("Straighten Value:", straighten);
-    console.log("Rotate Left Value:", rotateLeft);
-    console.log("Rotate Right Value:", rotateRight);
-
     const rotation = rotateRight - rotateLeft;
 
     try {
     cropper.rotateTo(rotation);
 
     // Straighten the image (simulating shear/skew effect)
-    const canvas = cropper.getCroppedCanvas();
+    let canvas = cropper.getCroppedCanvas();
     if (straighten !== 0 && canvas) {
-        const ctx = canvas.getContext('2d');
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+
+        const ctx = tempCanvas.getContext('2d');
         ctx.setTransform(1, straighten / 100, straighten / 100, 1, 0, 0);
         ctx.drawImage(canvas, 0, 0);
+        canvas = tempCanvas;
     }
+    console.log($image.attr('src'));
+    let new_Img = $image.attr('src');
     
-    const relativePath = src.replace(location.origin, '');
+    const relativePath = new_Img.replace(location.origin, '');
     const extension = relativePath.split('.').pop().toLowerCase();
-    cropper.getCroppedCanvas().toBlob(function (blob) {
+    canvas.toBlob(function (blob) {
         const formData = new FormData();
         formData.append('rotateImage', blob, `rotate-image.${extension}`);
         formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
@@ -272,7 +275,6 @@ function processImage() {
                     filenameInput.name = 'filename';
                     filenameInput.value = data.filename;
                     form.appendChild(filenameInput);
-
                     document.body.appendChild(form);
                     form.submit();
                 }
@@ -282,8 +284,6 @@ function processImage() {
             }
         })
     })
-
-    // $image
     } catch (error) {
         console.error("Error applying transformations:", error);
     }

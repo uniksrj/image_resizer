@@ -109,20 +109,17 @@ class CropImageController extends Controller
 
     public function saveRotateImage(Request $request){
         $validated = $request->validate([
-            'croppedImage' => 'required|file|mimes:jpeg,png,jpg|max:10240', // Validate image
+            'rotateImage' => 'required|file|mimes:jpeg,png,jpg', 
         ]);
-        // $manager = new ImageManager('imagick');
-        // Get the uploaded file
-        $image = $request->file('croppedImage');
+
+        $image = $request->file('rotateImage');
         $imgExtension = $image->getClientOriginalExtension();
-        
-        // Define the storage path for the cropped image
+                
         $croppedImagePath = 'rotate_images/rotate_' . time() .'.'.$imgExtension;
 
-        // Store the file using Intervention Image
         $img = ImageManager::imagick()->read($image->getPathname());
-        if (!file_exists(public_path('storage/uploads/cropped_images/'))) {
-            mkdir(public_path('storage/uploads/cropped_images/'), 0777, true);
+        if (!file_exists(public_path('storage/uploads/rotate_images/'))) {
+            mkdir(public_path('storage/uploads/rotate_images/'), 0777, true);
         }
         $img->save(public_path('storage/uploads/'.$croppedImagePath));
 

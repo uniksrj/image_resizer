@@ -41,8 +41,8 @@ Route::post('/save-cropped-image', [CropImageController::class, 'saveCroppedImag
 
 Route::get('/download-page/{filename}', [CropImageController::class, "Downloadview"])->name('download_page');
 Route::post('/download-page', function (Request $request) {
-    $filename = $request->input('filename'); // Get filename from POST request
-
+    $filename = $request->input('filename'); 
+    
     if ($filename && file_exists(public_path('storage/uploads/' . $filename))) {
         return view('downloadPage', ['filename' => $filename]);
     }
