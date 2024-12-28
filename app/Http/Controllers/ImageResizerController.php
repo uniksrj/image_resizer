@@ -111,5 +111,14 @@ class ImageResizerController extends Controller
 
         return response()->download($filePath);
     }
+
+    public function save_review(Request $request){
+        $request->validate([
+            'username' => 'required',
+            'rating' => 'required',
+            'review' => 'required',           
+        ]);
+        
+    }
    
 }

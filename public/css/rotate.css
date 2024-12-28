@@ -41,8 +41,8 @@ input[type="range"]::-moz-range-thumb {
 #colorSlider {
     background: linear-gradient(
         to right,
-        var(--slider-color-left, hsl(0, 100%, 50%)) 0%,
-        var(--slider-color-right, hsl(360, 100%, 50%)) 100%
+        var(--slider-color-left, hsl(0, 0%, 75%)) 0%,
+        var(--slider-color-right, hsl(0, 0%, 75%)) 100%
     );
 }
 

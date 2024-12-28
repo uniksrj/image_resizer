@@ -7,11 +7,11 @@ function initializeCropper(imageElement) {
         viewMode: 2,
         background: false,
         autoCrop: false,
-        cropBoxResizable: false,
+        // cropBoxResizable: false,
         cropBoxMovable: false,
         dragMode: 'none',
         responsive: false,
-        zoomable: false,
+        // zoomable: false,
         zoomOnTouch: false,
         ready: function () {
             fitImageToContainer();
@@ -138,23 +138,42 @@ function bindRotateEvents() {
     });
 
     $('#colorSlider').on('input', function () {
-        var angle = $(this).val();
-        // Ensure the slider ranges from -360 to 360
-        if (angle < -45) {
-            angle += 45;
-        } else if (angle > 45) {
-            angle -= 45;
+        const angle = parseFloat($(this).val()) || 0;
+
+        // Clamp angle to -360° to 360°
+        const rotationAngle = Math.max(-360, Math.min(360, angle));
+        $('#degree').html(`${rotationAngle} &deg;`);
+    
+        // Get container and image data
+        const containerData = cropper.getContainerData();
+        const imageData = cropper.getImageData();
+    
+        // Calculate the base scale
+        const baseScale = Math.min(
+            containerData.width / imageData.naturalWidth,
+            containerData.height / imageData.naturalHeight
+        );
+    
+        // Zoom factor based on rotation
+        const zoomFactor = 1 + Math.abs(rotationAngle) / 90;
+    
+        // Final scale combines base scale and zoom factor
+        const finalScale = baseScale * zoomFactor;
+    
+        // Set rotation and scale
+        cropper.rotateTo(rotationAngle);
+        cropper.scale(finalScale);
+    
+        let percent = ((rotationAngle + 45) / 90) * 100; // Normalize -45° to 45° to 0% to 100%
+        if (rotationAngle < 0) {
+            // Rotate left: Sky blue on the left, grey on the right
+            this.style.setProperty('--slider-color-left', `hsl(200, 100%, 70%)`); // Sky blue
+            this.style.setProperty('--slider-color-right', `hsl(0, 0%, 75%)`);    // Grey
+        } else {
+            // Rotate right: Grey on the left, sky blue on the right
+            this.style.setProperty('--slider-color-left', `hsl(0, 0%, 75%)`);    // Grey
+            this.style.setProperty('--slider-color-right', `hsl(200, 100%, 70%)`); // Sky blue
         }
-
-        // Straighten image to the specified angle
-        $('#degree').html(`${angle} &deg;`);
-        cropper.rotateTo(angle);
-        // Calculate the percentage position of the slider
-        let percent = (angle / 45) * 100;
-
-        // Update slider color gradient based on the position
-        this.style.setProperty('--slider-color-left', `hsl(${180 - percent}, 100%, 50%)`);
-        this.style.setProperty('--slider-color-right', `hsl(${180 + percent}, 100%, 50%)`);
     });
 }
 

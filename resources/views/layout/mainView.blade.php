@@ -86,12 +86,12 @@
                     <form id="reviewForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Your Name</label>
-                            <input type="text" class="form-control" id="username" placeholder="Enter your name"
+                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your name"
                                 required>
                         </div>
                         <div class="mb-3">
                             <label for="rating" class="form-label">Rating</label>
-                            <select class="form-select" id="rating" required>
+                            <select class="form-select" name="rating" id="rating" required>
                                 <option value="" disabled selected>Select your rating</option>
                                 <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
                                 <option value="4">⭐⭐⭐⭐ - Very Good</option>
@@ -102,9 +102,9 @@
                         </div>
                         <div class="mb-3">
                             <label for="review" class="form-label">Your Review</label>
-                            <textarea class="form-control" id="review" rows="4" placeholder="Write your review" required></textarea>
+                            <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                        <button type="submit" id="submit_form" class="btn btn-primary">Submit Review</button>
                     </form>
                 </div>
 

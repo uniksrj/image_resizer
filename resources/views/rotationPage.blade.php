@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/rotate.css') }}">
     <div class="container mx-auto min-h-[992px] max-h-[992px] flex flex-col md:flex-row py-0">
         <!-- Sidebar -->
-        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white min-h-screen p-2">
+        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white  p-2">
             <div class="block w-full pt-3">
                 <h4 class="text-2xl sans font-bold">Rotate Image</h4>
             </div>

@@ -80,3 +80,7 @@ Route::post('/save-rotate-image', [CropImageController::class, 'saveRotateImage'
 
 // Route::get('/flip-view', [CropImageController::class, "flip-view"])->name('tool-view/2');
 // Route::get('/meme-view', [CropImageController::class, "meme-view"])->name('tool-view/3');
+
+
+//review saved data
+Route::post('/save-review', [ImageResizerController::class, 'save_review']);

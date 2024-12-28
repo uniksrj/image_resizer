@@ -43,3 +43,48 @@ mobileMenu.addEventListener('click', () => {
 });
 
 
+$(document).ready(function () {
+    
+
+    $(document).on('click','#submit_form', function(e){
+        e.preventDefault();
+        if ($('#username').val() == '') {
+            $('#username').css("border", "1px solid red").focus();
+            return false;
+        }
+    
+        if ($('#rating').val() == '' || $('#rating').val() == 'disabled') {
+            $('#rating').css("border", "1px solid red").focus();
+            return false;
+        }
+    
+        if ($('#review').val() == '') {
+            $('#review').css("border", "1px solid red").focus();
+            return false;
+        }
+        let formData = new FormData($('#reviewForm')[0]);
+        console.log(formData);
+
+        $.ajax({
+            url: '/save-review', // Replace with your form submission URL
+            type: 'POST',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Handle success
+                alert('Form submitted successfully');
+            },
+            error: function(response) {
+                // Handle error
+                alert('An error occurred');
+            }
+        });
+        
+        // alert('you are here');
+    })
+})
+
