@@ -84,3 +84,4 @@ Route::post('/save-rotate-image', [CropImageController::class, 'saveRotateImage'
 
 //review saved data
 Route::post('/save-review', [ImageResizerController::class, 'save_review']);
+Route::get('/get-all-data', [ImageResizerController::class, 'get_reviews']);

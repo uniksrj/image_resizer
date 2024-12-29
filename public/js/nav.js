@@ -1,3 +1,5 @@
+const reviewContainer = document.getElementById('reviewContainer');
+var reviewData;
 if (document.getElementById('reviewForm') && document.getElementById('reviewsDisplay')) {
     const reviewForm = document.getElementById('reviewForm');
     const reviewsDisplay = document.getElementById('reviewsDisplay');
@@ -42,49 +44,169 @@ mobileMenu.addEventListener('click', () => {
     navList.classList.toggle('show');
 });
 
+function generateStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        stars += i <= rating ? '★' : '☆';
+    }
+    return `<span class="review-stars">${stars}</span>`;
+}
+
+function submitFormData(formData) {
+    $.ajax({
+        url: '/save-review', // Replace with your form submission URL
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+            getReviewData();
+        },
+        error: function (response) {
+            alert('An error occurred');
+        }
+    });
+}
+
+function getReviewData() {
+    $('#testimonialSlider').html('');
+    $.ajax({
+        url: '/get-all-data',
+        type: 'GET',
+        success: function (response) {
+            console.log(response);
+            if (response.length > 0) {
+                response.forEach((review) => {
+
+                    let city = '';
+                    let country = '';
+                    if (review.geolocation) {
+                        let [latitude, longitude] = review.geolocation.split('-').map(coord => parseFloat(coord));
+
+                        $.ajax({
+                            url: `https://address-from-to-latitude-longitude.p.rapidapi.com/geolocationapi?lat=${latitude}&lng=${longitude}`,
+                            type: 'GET',
+                            headers: {
+                                'x-rapidapi-key': 'fe8613b354msh758691d1e3f4edcp1842a0jsna52e063e64e7',
+                                'x-rapidapi-host': 'address-from-to-latitude-longitude.p.rapidapi.com'
+                            },
+                            async: false,
+                            crossDomain: true,
+                            success: function (apiResponse) {
+                                
+                                apiResponse.Results.forEach(place => {   
+                                                                     
+                                    if (place.region != '') {                                        
+                                        city = place.region;
+                                    } else{
+                                        city = 'unknown';
+                                    }
+                                    if (place.country != '') {                                        
+                                        country = place.country;
+                                    }else{
+                                        country = 'unknown';
+                                    }
+                                });
+                            },
+                            error: function (e) {
+                                console.error('Error fetching city and country', e);
+                            }
+                        });
+                    }
+                    
+                    const reviewHTML = `
+                        <div class="review-item">
+                            <p><strong>${review.username}</strong></p>
+                            <p class="stars">${generateStars(review.rating)}</p>
+                            <p>${review.review}</p>
+                           <p >${city}/${country}</p>
+                        </div>
+                    `;
+                    $('#testimonialSlider').append(reviewHTML);
+
+                });
+
+                $('#testimonialSlider').slick({
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 5000,
+                    dots: true,
+                    arrows: true,
+                    responsive: [
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
+
+            } else {
+                $('#testimonialSlider').html('<p>No reviews available yet.</p>');
+            }
+            $('#testimonialSlider').slick('refresh');
+        },
+        error: function () {
+            alert('Error loading reviews');
+        }
+    });
+}
 
 $(document).ready(function () {
-    
 
-    $(document).on('click','#submit_form', function(e){
+    getReviewData();
+
+    $(document).on('click', '#submit_form', function (e) {
         e.preventDefault();
+
         if ($('#username').val() == '') {
             $('#username').css("border", "1px solid red").focus();
             return false;
         }
-    
+
         if ($('#rating').val() == '' || $('#rating').val() == 'disabled') {
             $('#rating').css("border", "1px solid red").focus();
             return false;
         }
-    
+
         if ($('#review').val() == '') {
             $('#review').css("border", "1px solid red").focus();
             return false;
         }
-        let formData = new FormData($('#reviewForm')[0]);
-        console.log(formData);
 
-        $.ajax({
-            url: '/save-review', // Replace with your form submission URL
-            type: 'POST',
-            data: formData,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                // Handle success
-                alert('Form submitted successfully');
-            },
-            error: function(response) {
-                // Handle error
-                alert('An error occurred');
-            }
-        });
-        
-        // alert('you are here');
+        let formData = new FormData($('#reviewForm')[0]);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    formData.append('latitude', latitude);
+                    formData.append('longitude', longitude);
+
+                    submitFormData(formData);
+                },
+                function (error) {
+                    console.warn('Geolocation error or declined. Submitting without location.');
+                    submitFormData(formData);
+                }
+            );
+        } else {
+            console.warn('Geolocation not supported. Submitting without location.');
+            submitFormData(formData);
+        }
     })
 })
 

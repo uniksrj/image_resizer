@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\reviewTable;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
@@ -85,7 +86,7 @@ class ImageResizerController extends Controller
         $newFilePath = public_path('storage/uploads/resized/' . $newFilename);
         $image->save($newFilePath);
 
-        return view('downloadPage', ['filename' => 'resized/'.$newFilename]);
+        return view('downloadPage', ['filename' => 'resized/' . $newFilename]);
     }
 
     private function convertToPx($value, $unit)
@@ -112,13 +113,32 @@ class ImageResizerController extends Controller
         return response()->download($filePath);
     }
 
-    public function save_review(Request $request){
+    public function save_review(Request $request)
+    {
         $request->validate([
             'username' => 'required',
             'rating' => 'required',
-            'review' => 'required',           
+            'review' => 'required',
         ]);
-        
+
+        if (!empty($request->latitude)) {
+            $location = "$request->latitude-$request->longitude";
+        } else {
+            $location = "No location";
+        }
+
+        $reviewData = new reviewTable;
+        $reviewData->username = $request->username;
+        $reviewData->rating = $request->rating;
+        $reviewData->review = $request->review;
+        $reviewData->geolocation = $location;
+        $reviewData->save();
+        if (!empty($reviewData->id)) {
+           echo 1;
+        }
     }
-   
+    public function get_reviews() {
+        $reviews = reviewTable::all();
+        return response()->json($reviews);
+    }
 }

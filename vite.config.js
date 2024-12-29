@@ -15,6 +15,6 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        include: ['cropperjs', 'jquery', 'compressorjs'],
+        include: ['cropperjs', 'jquery', 'compressorjs', 'slick-carousel'],
     },
 });

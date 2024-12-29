@@ -111,8 +111,11 @@
                 <!-- Display User Reviews -->
                 <div id="reviewsDisplay" class="mt-5">
                     <h4 class="text-center mb-4">User Reviews</h4>
-                    <div class="review-box">
+                    {{-- <div  id="reviewContainer"  class="review-box">
                         <p>No reviews yet. Be the first to leave a review!</p>
+                    </div> --}}
+                    <div id="testimonialSlider" class="testimonial-slider">
+                        <!-- Reviews will be dynamically added here -->
                     </div>
                 </div>
             </div>
@@ -121,23 +124,8 @@
 
 
 
-    <footer class="footer bg-success text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>About Us</h5>
-                    <p>
-                        Our mission is to provide fast, reliable, and secure image resizing tools to users worldwide.
-                    </p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <h5>Follow Us</h5>
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-            <hr class="bg-white">
+    <footer class="footer bg-success text-white py-2">
+        <div class="container">     
             <div class="text-center">
                 <p class="mb-0">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
             </div>
