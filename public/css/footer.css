@@ -93,14 +93,14 @@
     margin: 0;
 }
 .testimonial-slider {
-    max-width: 800px;
+    max-width: 660px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 50px;
 }
 
 .review-item {
     text-align: center;
-    padding: 15px;
+    padding: 55px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -112,14 +112,13 @@
     transform: translateY(-10px);
 }
 
-.review-item p {
+/* .review-item p {
     margin: 10px 0;
     color: #333;
     font-size: 16px;
-}
+} */
 
 .review-item strong {
-    font-size: 18px;
     color: #555;
 }
 
@@ -131,12 +130,69 @@
     font-size: 12px;
     color: #999;
 }
-
+/* Styling for the Slick Previous and Next Buttons */
 .slick-prev, .slick-next {
-    color: #333;
-    font-size: 18px;
-    z-index: 1;
+    color: white !important;
+    background-color: #218838 !important; /* Initial background color */
+    font-size: 18px !important;
+    z-index: 2 !important;
+    width: 50px !important;
+    height: 50px !important;
+    border: none !important;
+    border-radius: 50% !important; /* Circular shape */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.3s ease !important;
+    position: absolute !important;
+    top: 50% !important; /* Center vertically */
+    transform: translateY(-50%) !important;
 }
+
+/* Positioning of Buttons */
+.slick-prev {
+    /* left: 56px !important; */
+    top: 183px !important;
+}
+
+.slick-next {
+    /* right: 56px !important; */
+    top: 183px !important;  
+}
+
+/* Arrow Icons Styling */
+.slick-prev::before, .slick-next::before {
+    font-size: 24px !important; /* Arrow size */
+    color: white !important; /* White arrow color */
+    line-height: 1 !important;
+    content: '' !important; /* Prevent default arrows if interfering */
+}
+/* Ensure Buttons Always Visible */
+.slick-prev, .slick-next {
+    opacity: 1 !important; /* Always visible */
+}
+
+/* Make Buttons Responsive */
+@media (max-width: 768px) {
+    .slick-prev, .slick-next {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
+    }
+
+    .slick-prev {
+        left: -40px !important;
+    }
+
+    .slick-next {
+        right: -40px !important;
+    }
+}
+
+
+/* .stars{
+    font-size: 20px;
+} */
 
 /*Crop page*/
 

@@ -110,12 +110,11 @@
 
                 <!-- Display User Reviews -->
                 <div id="reviewsDisplay" class="mt-5">
-                    <h4 class="text-center mb-4">User Reviews</h4>
+                    <h4 class="text-center reviews-title">User Reviews</h4>
                     {{-- <div  id="reviewContainer"  class="review-box">
                         <p>No reviews yet. Be the first to leave a review!</p>
                     </div> --}}
                     <div id="testimonialSlider" class="testimonial-slider">
-                        <!-- Reviews will be dynamically added here -->
                     </div>
                 </div>
             </div>

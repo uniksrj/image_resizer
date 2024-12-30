@@ -49,12 +49,12 @@ function generateStars(rating) {
     for (let i = 1; i <= 5; i++) {
         stars += i <= rating ? '★' : '☆';
     }
-    return `<span class="review-stars">${stars}</span>`;
+    return `<span class="text-3xl">${stars}</span>`;
 }
 
 function submitFormData(formData) {
     $.ajax({
-        url: '/save-review', // Replace with your form submission URL
+        url: '/save-review',
         type: 'POST',
         data: formData,
         headers: {
@@ -73,7 +73,7 @@ function submitFormData(formData) {
 }
 
 function getReviewData() {
-    $('#testimonialSlider').html('');
+    $('#testimonialSlider').empty(); 
     $.ajax({
         url: '/get-all-data',
         type: 'GET',
@@ -84,7 +84,7 @@ function getReviewData() {
 
                     let city = '';
                     let country = '';
-                    if (review.geolocation) {
+                    if (review.geolocatn) {
                         let [latitude, longitude] = review.geolocation.split('-').map(coord => parseFloat(coord));
 
                         $.ajax({
@@ -97,17 +97,17 @@ function getReviewData() {
                             async: false,
                             crossDomain: true,
                             success: function (apiResponse) {
-                                
-                                apiResponse.Results.forEach(place => {   
-                                                                     
-                                    if (place.region != '') {                                        
+
+                                apiResponse.Results.forEach(place => {
+
+                                    if (place.region != '') {
                                         city = place.region;
-                                    } else{
+                                    } else {
                                         city = 'unknown';
                                     }
-                                    if (place.country != '') {                                        
+                                    if (place.country != '') {
                                         country = place.country;
-                                    }else{
+                                    } else {
                                         country = 'unknown';
                                     }
                                 });
@@ -117,46 +117,50 @@ function getReviewData() {
                             }
                         });
                     }
-                    
+
                     const reviewHTML = `
                         <div class="review-item">
-                            <p><strong>${review.username}</strong></p>
-                            <p class="stars">${generateStars(review.rating)}</p>
-                            <p>${review.review}</p>
-                           <p >${city}/${country}</p>
+                        <p class="">${generateStars(review.rating)}</p>
+                        <p class="line-clamp-3">${review.review}</p>
+                        <p class="text-sm py-3 subpixel-antialiased"><strong>${review.username}</strong></p>
+                        <p >${city}/${country}</p>
                         </div>
                     `;
                     $('#testimonialSlider').append(reviewHTML);
 
                 });
-
-                $('#testimonialSlider').slick({
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 5000,
-                    dots: true,
-                    arrows: true,
-                    responsive: [
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 1
+                if ($('#testimonialSlider').hasClass('slick-initialized')) {
+                    $('#testimonialSlider').slick('refresh');
+                } else {
+                    $('#testimonialSlider').slick({
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                        autoplay: true,
+                        autoplaySpeed: 5000,
+                        dots: false,
+                        arrows: true,
+                        prevArrow: '<button type="button" class="slick-prev">←</button>',
+                        nextArrow: '<button type="button" class="slick-next">→</button>',
+                        responsive: [
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    slidesToShow: 1
+                                }
+                            },
+                            {
+                                breakpoint: 480,
+                                settings: {
+                                    slidesToShow: 1
+                                }
                             }
-                        },
-                        {
-                            breakpoint: 480,
-                            settings: {
-                                slidesToShow: 1
-                            }
-                        }
-                    ]
-                });
+                        ]
+                    });
+                }
 
             } else {
                 $('#testimonialSlider').html('<p>No reviews available yet.</p>');
             }
-            $('#testimonialSlider').slick('refresh');
         },
         error: function () {
             alert('Error loading reviews');
