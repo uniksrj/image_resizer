@@ -51,7 +51,7 @@
                         class="w-40 h-24 text-black flex items-center justify-center border bg-white rounded-md shadow-sm">
                         <i class="fa-solid fa-up-down text-blue-400 text-5xl"></i>
                     </button>
-                    <button id="horizontally"
+                    <button id="horizontally_btn"
                         class="w-40 h-24 text-black flex items-center justify-center border bg-white rounded-md shadow-sm">
                         <i class="fa-solid fa-left-right text-blue-400 text-5xl"></i>
                     </button>

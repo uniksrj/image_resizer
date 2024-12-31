@@ -1,3 +1,43 @@
+var $image = $('#uploadedImage');
+
+function initializeCropper(imageElement) {
+    if (window.cropper) {
+        window.cropper.destroy();
+    }
+    window.cropper = new Cropper(imageElement, {
+        viewMode: 2,
+        background: false,
+        autoCrop: false,
+        // cropBoxResizable: false,
+        cropBoxMovable: false,
+        dragMode: 'none',
+        responsive: false,
+        zoomable: false,
+        zoomOnTouch: false,
+        ready: function () {
+            fitImageToContainer();
+        },
+    });
+}
+
+function fitImageToContainer() {
+    if (window.cropper) {
+        const containerData = cropper.getContainerData();
+        const imageData = cropper.getImageData();
+
+        // Calculate scaling to fit the container
+        const scaleX = containerData.width / imageData.naturalWidth;
+        const scaleY = containerData.height / imageData.naturalHeight;
+        const scale = Math.min(scaleX, scaleY);
+
+        cropper.setCanvasData({
+            left: 0,
+            top: 0,
+            width: containerData.width,
+            height: containerData.height * scale,
+        });
+    }
+}
 function uploadImage(files) {
     $image = ''; 
     if (!files || files.length === 0) {
@@ -56,7 +96,36 @@ function uploadImage(files) {
     });
 }
 
+function bindRotateEvents() {
+    $('#horizontally_btn').off('click').on('click', function () {
+        if (window.cropper) {
+            cropper.scaleX(cropper.getData().scaleX * -1); 
+            fitImageToContainer()
+        } else {
+            alert('Cropper is not initialized.');
+        }
+    });
+
+    $('#vertically_btn').off('click').on('click', function () {
+        if (window.cropper) {
+            cropper.scaleY(cropper.getData().scaleY * -1);
+            fitImageToContainer()
+        } else {
+            alert('Cropper is not initialized.');
+        }
+    });
+
+    $('#resetButton').on('click', function () {
+        if (window.cropper) {
+            window.cropper.reset();
+        }
+        cropper.rotateTo(0);
+    });
+}
+
 $(document).ready(function () {
+
+    bindRotateEvents()
     $('#dropZone').on('dragover', function (e) {
         e.preventDefault();
         $(this).css({
@@ -83,7 +152,7 @@ $(document).ready(function () {
             alert('No valid file dropped. Please try again.');
         }
     });
-
+    let isUploading = false;
     window.handleFileChange = function (event) {
         const file = event.target.files[0];
         if (!file || isUploading) {
