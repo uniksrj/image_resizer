@@ -129,4 +129,8 @@ class CropImageController extends Controller
             'redirectUrl' => route('download_page', ['filename' => $croppedImagePath]),
         ]);
     }
+
+    public function flipView(){
+        return view('flipImage');
+    }
 }

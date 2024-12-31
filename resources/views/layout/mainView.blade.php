@@ -28,6 +28,9 @@
 <style>
     body {
         font-family: "Roboto Slab", serif;
+        -webkit-font-smoothing: auto;
+        -moz-osx-font-smoothing: auto;
+        letter-spacing: 0.09em;
         /* font-optical-sizing: auto; */
         font-weight: 400;
         font-style: normal;
@@ -64,7 +67,7 @@
                 </button>
                 <div class="dropdown-content">
                     <a href="{{ route('tool-view/1') }}">Rotate Image</a>
-                    <a href="#">Flip Image</a>
+                    <a href="{{route('flipPage')}}">Flip Image</a>
                     <a href="#">Meme Generator</a>
                 </div>
             </li>
@@ -77,54 +80,56 @@
     @yield('feature')
 
     @if (!request()->has('expires'))
-        <section class="reviews-section py-5">
-            <div class="container">
-                <h2 class="text-center reviews-title mb-4">What Our Users Say</h2>
-                <!-- Rating and Review Form -->
-                <div class="review-form p-4">
-                    <h4 class="mb-3">Leave a Review</h4>
-                    <form id="reviewForm">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Your Name</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your name"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="rating" class="form-label">Rating</label>
-                            <select class="form-select" name="rating" id="rating" required>
-                                <option value="" disabled selected>Select your rating</option>
-                                <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
-                                <option value="4">⭐⭐⭐⭐ - Very Good</option>
-                                <option value="3">⭐⭐⭐ - Good</option>
-                                <option value="2">⭐⭐ - Fair</option>
-                                <option value="1">⭐ - Poor</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="review" class="form-label">Your Review</label>
-                            <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review" required></textarea>
-                        </div>
-                        <button type="submit" id="submit_form" class="btn btn-primary">Submit Review</button>
-                    </form>
-                </div>
+        @if (Request::route()->getName() === 'home')
+            <section class="reviews-section py-5">
+                <div class="container">
+                    <h2 class="text-center reviews-title mb-4">What Our Users Say</h2>
+                    <!-- Rating and Review Form -->
+                    <div class="review-form p-4">
+                        <h4 class="mb-3">Leave a Review</h4>
+                        <form id="reviewForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" name="username" id="username"
+                                    placeholder="Enter your name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <select class="form-select" name="rating" id="rating" required>
+                                    <option value="" disabled selected>Select your rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ - Very Good</option>
+                                    <option value="3">⭐⭐⭐ - Good</option>
+                                    <option value="2">⭐⭐ - Fair</option>
+                                    <option value="1">⭐ - Poor</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="review" class="form-label">Your Review</label>
+                                <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review" required></textarea>
+                            </div>
+                            <button type="submit" id="submit_form" class="btn btn-primary">Submit Review</button>
+                        </form>
+                    </div>
 
-                <!-- Display User Reviews -->
-                <div id="reviewsDisplay" class="mt-5">
-                    <h4 class="text-center reviews-title">User Reviews</h4>
-                    {{-- <div  id="reviewContainer"  class="review-box">
+                    <!-- Display User Reviews -->
+                    <div id="reviewsDisplay" class="mt-5">
+                        <h4 class="text-center reviews-title">User Reviews</h4>
+                        {{-- <div  id="reviewContainer"  class="review-box">
                         <p>No reviews yet. Be the first to leave a review!</p>
                     </div> --}}
-                    <div id="testimonialSlider" class="testimonial-slider">
+                        <div id="testimonialSlider" class="testimonial-slider">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endif
     @endif
 
 
 
     <footer class="footer bg-success text-white py-2">
-        <div class="container">     
+        <div class="container">
             <div class="text-center">
                 <p class="mb-0">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
             </div>
