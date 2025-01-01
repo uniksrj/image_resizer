@@ -91,8 +91,12 @@ class CropImageController extends Controller
         $validated = $request->validate([
             'image' => 'required|file|mimes:jpeg,png,jpg|max:10240', 
         ]);
-
-        $directory = 'uploads/rotate_image';
+        if ($request->input('method') == 'flipImage') {
+            $directory = 'uploads/flip_image';
+        }else{
+            $directory = 'uploads/rotate_image';
+        }
+        
         $storagePath = storage_path('app/' . $directory);
     
         if (!file_exists($storagePath)) {
@@ -103,7 +107,7 @@ class CropImageController extends Controller
 
         $filename = basename($path);
 
-        return response()->json(['success' => true, 'path' => asset('storage/uploads/rotate_image/'.$filename)]);
+        return response()->json(['success' => true, 'path' => asset('storage/'.$directory.'/'.$filename)]);
 
     }
 
@@ -132,5 +136,28 @@ class CropImageController extends Controller
 
     public function flipView(){
         return view('flipImage');
+    }
+
+    public function saveFlipImage(Request $request){
+        $request->validate([
+            'flipImage' => 'required|file|mimes:jpeg,png,jpg', 
+        ]);
+
+        $image = $request->file('flipImage');
+        $imgExtension = $image->getClientOriginalExtension();
+                
+        $flipImagePath = 'flip_images/flip_' . time() .'.'.$imgExtension;
+
+        $img = ImageManager::imagick()->read($image->getPathname());
+        if (!file_exists(public_path('storage/uploads/flip_images/'))) {
+            mkdir(public_path('storage/uploads/flip_images/'), 0777, true);
+        }
+        $img->save(public_path('storage/uploads/'.$flipImagePath));
+
+        return response()->json([
+            'status' => 'success',
+            'filename' => $flipImagePath,
+            'redirectUrl' => route('download_page', ['filename' => $flipImagePath]),
+        ]);
     }
 }

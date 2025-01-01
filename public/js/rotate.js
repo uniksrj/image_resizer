@@ -314,12 +314,7 @@ $(document).ready(function () {
         processImage();
     });
     bindRotateEvents()
-
-    window.addEventListener('resize', () => {
-        if (window.cropper) {
-            fitImageToContainer();
-        }
-    });
+    
     // bindStraightenSlider()
 
     let cropper = null;

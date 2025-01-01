@@ -5,41 +5,25 @@ function initializeCropper(imageElement) {
         window.cropper.destroy();
     }
     window.cropper = new Cropper(imageElement, {
-        viewMode: 2,
-        background: false,
-        autoCrop: false,
-        // cropBoxResizable: false,
-        cropBoxMovable: false,
-        dragMode: 'none',
-        responsive: false,
+        viewMode: 1,             // Only dragging allowed
+        dragMode: 'move',        // Enable dragging only
+        responsive: true,        // Maintain aspect ratio when resizing container
+        // aspectRatio: 16 / 9,     // Maintain a specific aspect ratio
+        movable: false,
         zoomable: false,
-        zoomOnTouch: false,
+        autoCrop: false,       // Disable zoom
+        // scalable: false,         // Disable scaling
+        rotatable: false,        // Disable rotation
+        cropBoxMovable: false,   // Disable moving crop box
+        cropBoxResizable: false, // Disable resizing crop box
+        guides: false,           // Hide grid lines
+        background: false,       // Disable background grid
         ready: function () {
-            fitImageToContainer();
         },
     });
 }
-
-function fitImageToContainer() {
-    if (window.cropper) {
-        const containerData = cropper.getContainerData();
-        const imageData = cropper.getImageData();
-
-        // Calculate scaling to fit the container
-        const scaleX = containerData.width / imageData.naturalWidth;
-        const scaleY = containerData.height / imageData.naturalHeight;
-        const scale = Math.min(scaleX, scaleY);
-
-        cropper.setCanvasData({
-            left: 0,
-            top: 0,
-            width: containerData.width,
-            height: containerData.height * scale,
-        });
-    }
-}
 function uploadImage(files) {
-    $image = ''; 
+    $image = '';
     if (!files || files.length === 0) {
         alert('No file selected.');
         return;
@@ -58,6 +42,7 @@ function uploadImage(files) {
 
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('method', 'flipImage');
 
     $.ajax({
         url: '/save-temp',
@@ -81,12 +66,13 @@ function uploadImage(files) {
         },
         success: function (response) {
             // Replace the image inside #dynamic_img
-            $('#dynamic_img').html(`<img id="uploadedImage" src="${response.path}" alt="Uploaded Image" class="max-w-full  max-h-[680px] object-contain" />`);
+            $('#dynamic_img').html(`<img id="uploadedImage" src="${response.path}" alt="Uploaded Image" style="transform:none;" class=" w-full h-auto object-contain" />`);
             $('#progressLoadingImg').addClass('hidden'); // Hide loader
 
             $image = $('#uploadedImage');
             console.log($image);
             initializeCropper($image[0]);
+
 
         },
         error: function () {
@@ -99,19 +85,22 @@ function uploadImage(files) {
 function bindRotateEvents() {
     $('#horizontally_btn').off('click').on('click', function () {
         if (window.cropper) {
-            cropper.scaleX(cropper.getData().scaleX * -1); 
-            fitImageToContainer()
+            cropper.scaleX(cropper.getData().scaleX * -1);
+
         } else {
-            alert('Cropper is not initialized.');
+            alert('Please upload new Image');
+            console.warn('Cropper is not initialized.');
+
         }
     });
 
     $('#vertically_btn').off('click').on('click', function () {
         if (window.cropper) {
             cropper.scaleY(cropper.getData().scaleY * -1);
-            fitImageToContainer()
+
         } else {
-            alert('Cropper is not initialized.');
+            alert('Please upload new Image');
+            console.warn('Cropper is not initialized.');
         }
     });
 
@@ -119,8 +108,58 @@ function bindRotateEvents() {
         if (window.cropper) {
             window.cropper.reset();
         }
-        cropper.rotateTo(0);
     });
+}
+
+function processImage() {
+    $('#loader-container').css('display', 'flex'); //
+    if (!cropper) {
+        console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
+        return;
+    }
+
+    console.log($image[0].src);
+
+    console.log(cropper.getCroppedCanvas());
+
+    const extension = $image[0].src.split('.').pop();
+    console.log(extension);
+    cropper.getCroppedCanvas().toBlob(function (blob) {
+        const formData = new FormData();
+        formData.append('flipImage', blob, `flip-image.${extension[1]}`);
+        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+        $.ajax({
+            url: '/save-flip-image',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data.status === 'success') {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/download-page';
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                    const filenameInput = document.createElement('input');
+                    filenameInput.type = 'hidden';
+                    filenameInput.name = 'filename';
+                    filenameInput.value = data.filename;
+                    form.appendChild(filenameInput);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            },
+            error: function (err) {
+                console.error(err);
+            }
+        })
+    })
 }
 
 $(document).ready(function () {
@@ -171,4 +210,8 @@ $(document).ready(function () {
         isUploading = false;
 
     };
+
+    $(document).on('click', '#process_data', function () {
+        processImage();
+    });
 })

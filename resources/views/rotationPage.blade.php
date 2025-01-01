@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/rotate.css') }}">
     <div class="container mx-auto min-h-[992px] max-h-[992px] flex flex-col md:flex-row py-0">
         <!-- Sidebar -->
-        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white  p-2">
+        <aside class="w-full md:w-1/4 bg-green-300 relative shadow text-white  p-2">
             <div class="block w-full pt-3">
                 <h4 class="text-2xl sans font-bold">Rotate Image</h4>
             </div>
@@ -24,9 +24,9 @@
                         ondragleave="dragLeave(event)" ondrop="handleDrop(event)">
                         <div class="text-center">
                             <label class="w-full cursor-pointer">
-                                <input type="file" id="uploadFile" hidden  onchange="handleFileChange(event)"/>
+                                <input type="file" id="uploadFile" hidden onchange="handleFileChange(event)" />
                                 <div class="flex w-full h-9 px-2 bg-gold rounded-lg text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
-                                    style="background-color: #FFBF00;" >
+                                    style="background-color: #FFBF00;">
                                     <span id="dropZoneText" class="text-lg font-bold" style="color: #FFFFFF">Choose
                                         File</span>
                                 </div>
@@ -69,24 +69,27 @@
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Straighten</h2>
                 <div class="relative flex gap-2 items-center">
                     <!-- Slider -->
-                    <input type="range"  min="-45" max="45" step="1" id="colorSlider"
-                        class="w-10/12 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        ><span id="degree" class="text-black">0&deg;</span>
+                    <input type="range" min="-45" max="45" step="1" id="colorSlider"
+                        class="w-10/12 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"><span id="degree"
+                        class="text-black">0&deg;</span>
                 </div>
                 <span class="text-xs block text-gray-400 py-2">Rotate image in any angle</span>
             </div>
 
-            <div class="w-full shadow rounded-lg my-3">
-                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer mt-4 text-black"
-                    >Reset</button>
+            <div class="w-full shadow rounded-lg mb-5">
+                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black">Reset</button>
             </div>
-            <hr class=" border-3">
-            <div class="w-full shadow rounded-lg my-8">
-                <button class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer mt-4 text-white text-lg antialiased font-bold" id="process_data">Process Image</button>
+            <hr class="border-3">
+            <div class="w-11/12 mt-10 absolute inset-x-4 bottom-6">
+                <div class="w-full shadow rounded-lg">
+                    <button id="process_data"
+                        class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer text-white text-lg antialiased font-bold">Process
+                        Image</button>
+                </div>
             </div>
         </aside>
 
-        
+
 
 
         <!-- Main Content -->
@@ -95,19 +98,20 @@
                 <div></div>
             </div>
             <div class="w-full min-h-[736px] max-h-[736px]">
-                <div class="flex justify-center items-center w-[1084px] h-[680px] overflow-hidden bg-gray-100">
-                    <span id="dynamic_img" class="p-8">
-                        <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
-                            class="object-contain max-w-full max-h-full">
-                    </span>
+                <div class="flex justify-center items-center w-full h-[736px] min-h-[736px] max-h-[736px] overflow-hidden bg-gray-100 p-8"
+                    id="dynamic_img">
+                    <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
+                        class="object-contain max-w-full max-h-full">
                 </div>
             </div>
             <div class="w-full h-28 border-t-2 p-6">
                 <div></div>
             </div>
-        </main>
+        </main>   
     </div>
-    <script type="module" src="{{ asset('js/rotate.js') }}" ></script>
+
+   
+    <script type="module" src="{{ asset('js/rotate.js') }}"></script>
     {{-- defer --}}
 @endsection
 

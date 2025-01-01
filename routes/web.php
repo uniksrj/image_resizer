@@ -89,3 +89,4 @@ Route::get('/get-all-data', [ImageResizerController::class, 'get_reviews']);
 
 //Flip Image page
 Route::get('/flipPage', [CropImageController::class, 'flipView'])->name('flipPage');
+Route::post('/save-flip-image', [CropImageController::class, 'saveFlipImage']);

@@ -76,26 +76,25 @@
             </div>
         </aside>
 
-
-
-
         <!-- Main Content -->
         <main class="w-full  md:w-3/4 bg-white shadow">
             <div class="w-full h-28 border-b-2 p-6">
                 <div></div>
             </div>
-            <div class="w-full min-h-[736px] max-h-[736px]">
-                <div class="flex justify-center items-center w-[1084px] h-[680px] overflow-hidden bg-gray-100">
-                    <span id="dynamic_img" class="p-8">
-                        <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
-                            class="object-contain max-w-full max-h-full">
-                    </span>
+            <div class="w-full  min-h-[736px] max-h-[736px]">
+                <div class="flex justify-center items-center w-full h-[736px] min-h-[736px] max-h-[736px] overflow-hidden bg-gray-100 p-8"
+                    id="dynamic_img">
+                    <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
+                        class="object-contain max-w-full max-h-full">
                 </div>
             </div>
             <div class="w-full h-28 border-t-2 p-6">
                 <div></div>
             </div>
         </main>
+        <div id="loader-container">
+            <div id="loader"></div>
+        </div>  
     </div>
     <script type="module" src="{{ asset('js/flip.js') }}"></script>
 @endsection
