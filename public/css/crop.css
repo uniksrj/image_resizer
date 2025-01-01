@@ -140,7 +140,7 @@ button:hover {
 
 /*loader*/
 /* Full-screen loader container */
-#loader-container {
+#loader-container{
     position: fixed;
     top: 0;
     left: 0;
@@ -154,45 +154,31 @@ button:hover {
     display: none; /* Initially hidden */
 }
 
-/* Loader animation */
 #loader {
-    animation: animate 1.5s linear infinite;
-    clip: rect(0, 80px, 80px, 40px);
-    height: 80px;
-    width: 80px;
-    position: relative;
-}
-
-@keyframes animate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(220deg);
-    }
-}
-
-#loader:after {
-    animation: animate2 1.5s ease-in-out infinite;
-    clip: rect(0, 80px, 80px, 40px);
-    content: '';
-    border-radius: 50%;
-    height: 80px;
-    width: 80px;
-    position: absolute;
-}
-
-@keyframes animate2 {
-    0% {
-        box-shadow: inset #fff 0 0 0 17px;
-        transform: rotate(-140deg);
-    }
-    50% {
-        box-shadow: inset #fff 0 0 0 2px;
-    }
-    100% {
-        box-shadow: inset #fff 0 0 0 17px;
-        transform: rotate(140deg);
-    }
-}
+    width: 48px;
+    height: 48px;
+    background:#3FD97F;
+    --c:no-repeat linear-gradient(#000 0 0);
+    --s:18px 18px;
+    -webkit-mask:
+      var(--c) left  4px top    4px,
+      var(--c) right 4px top    4px,
+      var(--c) right 4px bottom 4px,
+      var(--c) left  4px bottom 4px,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+            mask-composite:exclude;
+    animation: l5 1.5s infinite;
+  }
+  @keyframes l5 {
+    0%    {-webkit-mask-size:0    0  ,0    0  ,0    0  ,0    0  ,auto}
+    12.5% {-webkit-mask-size:var(--s),0    0  ,0    0  ,0    0  ,auto}
+    25%   {-webkit-mask-size:var(--s),var(--s),0    0  ,0    0  ,auto}
+    37.5% {-webkit-mask-size:var(--s),var(--s),var(--s),0    0  ,auto}
+    50%   {-webkit-mask-size:var(--s),var(--s),var(--s),var(--s),auto}
+    62.5% {-webkit-mask-size:0    0  ,var(--s),var(--s),var(--s),auto}
+    75%   {-webkit-mask-size:0    0  ,0    0  ,var(--s),var(--s),auto}
+    87.5% {-webkit-mask-size:0    0  ,0    0  ,0   0   ,var(--s),auto}
+    100%  {-webkit-mask-size:0    0  ,0    0  ,0   0   ,0   0   ,auto}
+  }
 

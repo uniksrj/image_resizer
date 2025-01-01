@@ -236,6 +236,7 @@ function uploadImage(files) {
 }
 
 function processImage() {
+    $('#loader-container').css('display', 'flex'); 
     if (!cropper) {
         console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
         return;

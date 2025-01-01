@@ -48,9 +48,9 @@
             </div>
         </div>
     </div>
-    <div id="loaderOverlay">
-        <div id="loaderSpinner"></div>
-    </div>
+    <div id="loader-container">
+        <div id="loader"></div>
+    </div>  
     <script type="module" src="{{ asset('js/compress.js') }}"></script>
 @endsection
 

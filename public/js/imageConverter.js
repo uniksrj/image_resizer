@@ -42,7 +42,7 @@ function uploadImage(files) {
 
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('method', 'flipImage');
+    formData.append('convert', 'converterImage');
 
     $.ajax({
         url: '/save-temp',
@@ -213,4 +213,35 @@ $(document).ready(function () {
     $(document).on('click', '#process_data', function () {
         processImage();
     });
+    const $dropdownButton = $('#dropdownButton');
+    const $dropdownList = $('#dropdownList');
+    const $selectedValue = $('#selectedValue');
+    const $hiddenInput = $('#format');
+
+    // Toggle dropdown visibility
+    $dropdownButton.on('click', function () {
+        $dropdownList.toggleClass('hidden');
+    });
+
+    // Handle selection
+    $('.dropdown-item').on('click', function () {
+        const $item = $(this);
+        const value = $item.data('value');
+        // Update hidden input
+        $hiddenInput.val(value);
+
+        // Clear checkmarks from other items
+        $('.dropdown-item').find('.checkmark').remove();
+
+        // Add checkmark to the selected item
+        if (!$item.find('.checkmark').length) {
+            $item.append('<span class="checkmark text-green-500 ml-auto">&#10003;</span>');
+        }
+        // Add checkmark only if not already present
+        $selectedValue.text(value.toUpperCase());
+
+        // Hide the dropdown
+        $dropdownList.addClass('hidden');
+    });
+
 })

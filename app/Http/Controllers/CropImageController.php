@@ -93,6 +93,9 @@ class CropImageController extends Controller
         ]);
         if ($request->input('method') == 'flipImage') {
             $directory = 'uploads/flip_image';
+        }
+        elseif($request->input('method') == 'convert'){
+            $directory = 'uploads/convert_image';
         }else{
             $directory = 'uploads/rotate_image';
         }
@@ -159,5 +162,9 @@ class CropImageController extends Controller
             'filename' => $flipImagePath,
             'redirectUrl' => route('download_page', ['filename' => $flipImagePath]),
         ]);
+    }
+
+    public function converter(){
+        return view(('imageConverter'));
     }
 }

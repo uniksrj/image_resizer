@@ -1,13 +1,11 @@
 @extends('layout.mainView')
-
 @section('content')
-    <link rel="stylesheet" href="{{ asset('css/rotate.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/flip.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/imageConverter.css') }}">
     <div class="container mx-auto min-h-[992px] max-h-[992px] flex flex-col md:flex-row py-0">
         <!-- Sidebar -->
-        <aside class="w-full md:w-1/4 bg-green-300 relative shadow text-white  p-2">
+        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white relative p-2">
             <div class="block w-full pt-3">
-                <h4 class="text-2xl sans font-bold">Rotate Image</h4>
+                <h4 class="text-2xl sans font-bold">Flip Image</h4>
             </div>
             <div class="w-full py-2 bg-green-300 rounded-2xl gap-3 border-4 border-dotted rounded-md  grid my-3">
                 <div class="grid gap-1">
@@ -44,61 +42,68 @@
                         <span id="progressText" class="text-sm text-gray-500 text-center mt-2">0% Uploaded</span>
                     </div>
                 </div>
-            </div> <!-- Buttons Container -->
-            <div class="w-full justify-center flex gap-7">
-                <div class="w-5/12 h-max border rounded-md bg-white justify-center flex shadow-sm space-x-6">
-                    <button id="rotateRight" class="w-24 h-24 text-black flex items-center justify-center">
-                        <i class="fa-solid fa-rotate-right text-4xl"></i>
+            </div>
+            <div class="w-full flex flex-col items-center gap-2 mt-20 mb-10">
+                <!-- Buttons Section -->
+                <div class="relative inline-block w-full">
+                    <label for="format" class="block text-sm font-medium text-gray-700 mb-2">Convert To</label>
+                    <button id="dropdownButton"
+                        class="w-full text-left border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <span id="selectedValue" class="block text-gray-700">Select Format</span>
+                        <svg class="w-4 h-4 absolute right-4 top-10 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                     </button>
+                    <ul id="dropdownList"
+                        class="absolute w-full border border-gray-300 rounded-lg bg-white shadow-lg hidden mt-1 z-10">
+                        <li data-value="jpeg"
+                            class="dropdown-item text-black px-4 py-2 hover:bg-blue-200 cursor-pointer flex justify-between items-center">
+                            JPEG</li>
+                        <li data-value="png"
+                            class="dropdown-item text-black px-4 py-2 hover:bg-blue-200 cursor-pointer flex justify-between items-center">
+                            PNG</li>
+                        <li data-value="webp"
+                            class="dropdown-item text-black px-4 py-2 hover:bg-blue-200 cursor-pointer flex justify-between items-center">
+                            WebP</li>
+                        <li data-value="gif"
+                            class="dropdown-item text-black px-4 py-2 hover:bg-blue-200 cursor-pointer flex justify-between items-center">
+                            GIF</li>
+                        <li data-value="bmp"
+                            class="dropdown-item px-4 text-black py-2 hover:bg-blue-200 cursor-pointer flex justify-between items-center">
+                            BMP</li>
+                    </ul>
+                    <input type="hidden" name="format" id="format" value="">
                 </div>
-                <div class=" w-5/12 h-max bg-white rounded-md border shadow-sm justify-center flex space-x-6 ">
-                    <button id="rotateLeft" class="w-24 h-24 text-black flex items-center justify-center ">
-                        <i class="fa-solid fa-rotate-left text-4xl"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="w-full justify-center flex gap-7">
-                <div class="w-2/5 h-max justify-center flex space-x-6 my-2">
-                    <span class="text-sm justify-center font-bold text-shadow-lg text-black">clock wise</span>
-                </div>
-                <div class=" w-2/5 h-max justify-center flex space-x-6 my-2">
-                    <span class="text-sm justify-center font-bold text-shadow-lg text-black">counter clock wise</span>
-                </div>
-            </div>
 
-            <div class="w-full p-6 bg-white shadow rounded-lg my-3">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Straighten</h2>
-                <div class="relative flex gap-2 items-center">
-                    <!-- Slider -->
-                    <input type="range" min="-45" max="45" step="1" id="colorSlider"
-                        class="w-10/12 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"><span id="degree"
-                        class="text-black">0&deg;</span>
+                <div class="mb-5">
+                    <label for="quality" class="block text-sm font-medium text-gray-700 mb-2">Compression Quality (Only for
+                        JPEG/PNG)</label>
+                    <input type="number" name="quality" id="quality"
+                        class="form-input h-10 py-6 text-black block w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        min="10" max="100" value="80" required>
                 </div>
-                <span class="text-xs block text-gray-400 py-2">Rotate image in any angle</span>
-            </div>
 
-            <div class="w-full shadow rounded-lg mb-5">
-                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black">Reset</button>
-            </div>
-            <hr class="border-3">
-            <div class="w-11/12 mt-10 absolute inset-x-4 bottom-6">
-                <div class="w-full shadow rounded-lg">
-                    <button id="process_data"
-                        class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer text-white text-lg antialiased font-bold">Process
-                        Image</button>
+                <div class="w-full shadow rounded-lg mb-5">
+                    <button id="resetButton"
+                        class="w-full h-10 bg-white rounded-lg cursor-pointer text-black">Reset</button>
                 </div>
-            </div>
+                <hr class="border-3">
+                <div class="w-11/12 mt-10 absolute inset-x-4 bottom-6">
+                    <div class="w-full shadow rounded-lg">
+                        <button id="process_data"
+                            class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer text-white text-lg antialiased font-bold">Process
+                            Image</button>
+                    </div>
+                </div>
         </aside>
-
-
-
 
         <!-- Main Content -->
         <main class="w-full  md:w-3/4 bg-white shadow">
             <div class="w-full h-28 border-b-2 p-6">
                 <div></div>
             </div>
-            <div class="w-full min-h-[736px] max-h-[736px]">
+            <div class="w-full  min-h-[736px] max-h-[736px]">
                 <div class="flex justify-center items-center w-full h-[736px] min-h-[736px] max-h-[736px] overflow-hidden bg-gray-100 p-8"
                     id="dynamic_img">
                     <img id="uploadedImage" src="{{ asset('storage/cut_logo.png') }}" alt="Demo Image"
@@ -108,17 +113,14 @@
             <div class="w-full h-28 border-t-2 p-6">
                 <div></div>
             </div>
-        </main>   
+        </main>
         <div id="loader-container">
             <div id="loader"></div>
-        </div>  
+        </div>
     </div>
-
-   
-    <script type="module" src="{{ asset('js/rotate.js') }}"></script>
-    {{-- defer --}}
+    <script type="module" src="{{ asset('js/imageConverter.js') }}"></script>
 @endsection
 
 @section('title')
-    Rotate Image
+    Image Converter
 @endsection

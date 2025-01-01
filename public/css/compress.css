@@ -56,36 +56,47 @@
 
 /*loader*/
 
-#loaderOverlay {
-    position: fixed; /* Ensures it covers the entire viewport */
+#loader-container{
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Transparent black background */
-    z-index: 9999; /* Place it above all other elements */
-    display: none; /* Initially hidden */
-    align-items: center;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
     justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it's above other elements */
+    display: none; /* Initially hidden */
 }
 
-#loaderSpinner {
-    border: 8px solid #f3f3f3; /* Light gray border */
-    border-top: 8px solid #3498db; /* Blue color for the spinner */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
+#loader {
+    width: 48px;
+    height: 48px;
+    background:#3FD97F;
+    --c:no-repeat linear-gradient(#000 0 0);
+    --s:18px 18px;
+    -webkit-mask:
+      var(--c) left  4px top    4px,
+      var(--c) right 4px top    4px,
+      var(--c) right 4px bottom 4px,
+      var(--c) left  4px bottom 4px,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+            mask-composite:exclude;
+    animation: l5 1.5s infinite;
+  }
+  @keyframes l5 {
+    0%    {-webkit-mask-size:0    0  ,0    0  ,0    0  ,0    0  ,auto}
+    12.5% {-webkit-mask-size:var(--s),0    0  ,0    0  ,0    0  ,auto}
+    25%   {-webkit-mask-size:var(--s),var(--s),0    0  ,0    0  ,auto}
+    37.5% {-webkit-mask-size:var(--s),var(--s),var(--s),0    0  ,auto}
+    50%   {-webkit-mask-size:var(--s),var(--s),var(--s),var(--s),auto}
+    62.5% {-webkit-mask-size:0    0  ,var(--s),var(--s),var(--s),auto}
+    75%   {-webkit-mask-size:0    0  ,0    0  ,var(--s),var(--s),auto}
+    87.5% {-webkit-mask-size:0    0  ,0    0  ,0   0   ,var(--s),auto}
+    100%  {-webkit-mask-size:0    0  ,0    0  ,0   0   ,0   0   ,auto}
+  }
 
 /* Heading Title Styling */
 .heading-title {

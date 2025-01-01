@@ -68,7 +68,7 @@
                 <div class="dropdown-content">
                     <a href="{{ route('tool-view/1') }}">Rotate Image</a>
                     <a href="{{route('flipPage')}}">Flip Image</a>
-                    <a href="#">Meme Generator</a>
+                    <a href="{{route('converter-page')}}">Image Converter</a>
                 </div>
             </li>
         </ul>
