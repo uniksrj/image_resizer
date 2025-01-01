@@ -80,7 +80,7 @@
                     <label for="quality" class="block text-sm font-medium text-gray-700 mb-2">Compression Quality (Only for
                         JPEG/PNG)</label>
                     <input type="number" name="quality" id="quality"
-                        class="form-input h-10 py-6 text-black block w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        class="form-input h-10 p-2 text-black block w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                         min="10" max="100" value="80" required>
                 </div>
 
