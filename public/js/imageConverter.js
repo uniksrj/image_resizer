@@ -42,7 +42,7 @@ function uploadImage(files) {
 
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('convert', 'converterImage');
+    formData.append('method', 'converterImage');
 
     $.ajax({
         url: '/save-temp',
@@ -82,88 +82,48 @@ function uploadImage(files) {
     });
 }
 
-function bindRotateEvents() {
-    $('#horizontally_btn').off('click').on('click', function () {
-        if (window.cropper) {
-            cropper.scaleX(cropper.getData().scaleX * -1);
-
-        } else {
-            alert('Please upload new Image');
-            console.warn('Cropper is not initialized.');
-
-        }
-    });
-
-    $('#vertically_btn').off('click').on('click', function () {
-        if (window.cropper) {
-            cropper.scaleY(cropper.getData().scaleY * -1);
-
-        } else {
-            alert('Please upload new Image');
-            console.warn('Cropper is not initialized.');
-        }
-    });
-
-    $('#resetButton').on('click', function () {
-        if (window.cropper) {
-            window.cropper.reset();
-        }
-    });
-}
-
 function processImage() {
-    $('#loader-container').css('display', 'flex'); //
-    if (!cropper) {
-        console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
-        return;
-    }
-
-    console.log($image[0].src);
-
-    console.log(cropper.getCroppedCanvas());
-
-    const extension = $image[0].src.split('.').pop();
-    cropper.getCroppedCanvas().toBlob(function (blob) {
-        const formData = new FormData();
-        formData.append('flipImage', blob, `flip-image.${extension}`);
-        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-
-        $.ajax({
-            url: '/save-flip-image',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                if (data.status === 'success') {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/download-page';
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    const csrfInput = document.createElement('input');
-                    csrfInput.type = 'hidden';
-                    csrfInput.name = '_token';
-                    csrfInput.value = csrfToken;
-                    form.appendChild(csrfInput);
-                    const filenameInput = document.createElement('input');
-                    filenameInput.type = 'hidden';
-                    filenameInput.name = 'filename';
-                    filenameInput.value = data.filename;
-                    form.appendChild(filenameInput);
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            },
-            error: function (err) {
-                console.error(err);
+    $('#loader-container').css('display', 'flex');
+    let formate = $('#format').val();
+    let quality = $('#quality').val();
+    const Image = $image[0].src;
+    const imageUrl = new URL(Image);
+    const relativePath = imageUrl.pathname;
+    $.ajax({
+        url: '/save-convert-image',
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        data: JSON.stringify({ image: relativePath, formate: formate, quality: quality }),
+        contentType: 'application/json',
+        success: function (data) {
+            if (data.status === 'success') {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/download-page';
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+                const filenameInput = document.createElement('input');
+                filenameInput.type = 'hidden';
+                filenameInput.name = 'filename';
+                filenameInput.value = data.filename;
+                form.appendChild(filenameInput);
+                document.body.appendChild(form);
+                form.submit();
             }
-        })
+        },
+        error: function (err) {
+            console.error(err);
+        }
     })
 }
 
 $(document).ready(function () {
-
-    bindRotateEvents()
     $('#dropZone').on('dragover', function (e) {
         e.preventDefault();
         $(this).css({
@@ -211,37 +171,49 @@ $(document).ready(function () {
     };
 
     $(document).on('click', '#process_data', function () {
+        let formate = $('#format').val();
+        if (!formate) {
+            let $errorMessage = $('#dropdownButton').next('.error_message');
+            if ($errorMessage.length === 0) {
+                $('#dropdownButton').after('<span class="error_message text-red-500 text-sm">Please select a format</span>').focus();
+            }
+            return false; 
+        } else {
+            $('#dropdownButton').next('.error_message').remove();
+        }
         processImage();
     });
+
     const $dropdownButton = $('#dropdownButton');
     const $dropdownList = $('#dropdownList');
     const $selectedValue = $('#selectedValue');
     const $hiddenInput = $('#format');
 
-    // Toggle dropdown visibility
+
     $dropdownButton.on('click', function () {
         $dropdownList.toggleClass('hidden');
     });
 
-    // Handle selection
     $('.dropdown-item').on('click', function () {
         const $item = $(this);
         const value = $item.data('value');
-        // Update hidden input
+
         $hiddenInput.val(value);
 
-        // Clear checkmarks from other items
         $('.dropdown-item').find('.checkmark').remove();
-
-        // Add checkmark to the selected item
         if (!$item.find('.checkmark').length) {
             $item.append('<span class="checkmark text-green-500 ml-auto">&#10003;</span>');
         }
-        // Add checkmark only if not already present
-        $selectedValue.text(value.toUpperCase());
 
-        // Hide the dropdown
+        $selectedValue.text(value.toUpperCase());
         $dropdownList.addClass('hidden');
     });
+
+    $(document).on('click', '#resetButton', function () {
+        $selectedValue.text('Select Format');
+        $('.dropdown-item').find('.checkmark').remove();
+        $hiddenInput.val("");
+        $('#quality').val(80);
+    })
 
 })

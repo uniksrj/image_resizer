@@ -64,6 +64,8 @@
             $heading = 'Your Rotate image is ready to download!';
         }elseif ($myfile[0] == 'flip_images') {
             $heading = 'Your Flip image is ready to download!';
+        }elseif ($myfile[0] == 'convert_images') {
+            $heading = 'Your Convert image is ready to download!';
         }
     @endphp
     <div style="text-align: center; padding: 50px;">

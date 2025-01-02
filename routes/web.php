@@ -92,5 +92,5 @@ Route::get('/flipPage', [CropImageController::class, 'flipView'])->name('flipPag
 Route::post('/save-flip-image', [CropImageController::class, 'saveFlipImage']);
 
 //Image Converter
-
 Route::get('/converter-page', [CropImageController::class, 'converter'])->name('converter-page');
+Route::post('/save-convert-image', [CropImageController::class, 'saveConvertImage']);
