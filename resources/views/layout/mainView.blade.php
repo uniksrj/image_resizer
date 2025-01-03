@@ -5,7 +5,13 @@
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('title')</title>
+    <link rel="icon" type="image/x-icon" href="{{asset('favicon(1).ico')}}">
+     <!-- SEO Meta Tags -->
+     <meta name="description" content="Enhance, edit, and create stunning visuals with Image Tools. Explore intuitive online tools for editing photos, creating designs, and optimizing images for web and print.">
+     <meta name="keywords" content="image editor, online image tool, photo editing, image optimization, free image tools, resize images, edit photos, copress image, image converter">
+     <meta name="author" content="unik srj">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

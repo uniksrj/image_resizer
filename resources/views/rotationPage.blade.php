@@ -108,13 +108,13 @@
             <div class="w-full h-28 border-t-2 p-6">
                 <div></div>
             </div>
-        </main>   
+        </main>
         <div id="loader-container">
             <div id="loader"></div>
-        </div>  
+        </div>
     </div>
 
-   
+
     <script type="module" src="{{ asset('js/rotate.js') }}"></script>
     {{-- defer --}}
 @endsection

@@ -11,8 +11,9 @@ function initializeCropper(imageElement) {
         cropBoxMovable: false,
         dragMode: 'none',
         responsive: false,
-        // zoomable: false,
+        zoomable: false,
         zoomOnTouch: false,
+        checkOrientation: false,
         ready: function () {
             fitImageToContainer();
         },
@@ -23,91 +24,35 @@ function fitImageToContainer() {
         const containerData = cropper.getContainerData();
         const imageData = cropper.getImageData();
 
-        // Calculate scaling to fit the container
+        console.log("Container Dimensions:", containerData);
+        console.log("Image Dimensions:", imageData);
+
+        // Calculate scale to fit the image inside the container
         const scaleX = containerData.width / imageData.naturalWidth;
         const scaleY = containerData.height / imageData.naturalHeight;
         const scale = Math.min(scaleX, scaleY);
 
-        // Prevent the canvas from exceeding the container
+        // Calculate adjusted dimensions
+        const adjustedWidth = imageData.naturalWidth * scale;
+        const adjustedHeight = imageData.naturalHeight * scale;
+
+        // Center the image within the container
+        const offsetX = (containerData.width - adjustedWidth) / 2;
+        const offsetY = (containerData.height - adjustedHeight) / 2;
+
+        // Set the canvas data to match the container
         cropper.setCanvasData({
-            left: 0,
-            top: 0,
-            width: containerData.width,
-            height: containerData.height * scale, // Scale height proportionally
+            left: offsetX,
+            top: offsetY,
+            width: adjustedWidth,
+            height: adjustedHeight,
         });
+        cropper.clear(); 
+        bindRotateEvents();
     }
 }
 
-/*
-function adjustCanvasAfterRotation() {
-    const imageData = cropper.getImageData();
-    const canvasData = cropper.getCanvasData();
-    const containerData = cropper.getContainerData();
-    console.log(containerData);
-    console.log(imageData);
-    
 
-      const scale = Math.min(
-        containerData.width / imageData.naturalWidth,
-        containerData.height / imageData.naturalHeight
-    );
-
-    cropper.setCanvasData({
-        left: (containerData.width - imageData.naturalWidth * scale) / 2,
-        top: (containerData.height - imageData.naturalHeight * scale) / 2,
-        width: imageData.naturalWidth * scale,
-        height: imageData.naturalHeight * scale,
-    });
-
-    const rotatedWidth = Math.abs(
-        imageData.width * Math.cos(imageData.rotate * (Math.PI / 180)) +
-        imageData.height * Math.sin(imageData.rotate * (Math.PI / 180))
-    );
-    const rotatedHeight = Math.abs(
-        imageData.width * Math.sin(imageData.rotate * (Math.PI / 180)) +
-        imageData.height * Math.cos(imageData.rotate * (Math.PI / 180))
-    );
-
-    cropper.setCanvasData({
-        left: (containerData.width - rotatedWidth) / 2,
-        top: (containerData.height - rotatedHeight) / 2,
-        width: rotatedWidth,
-        height: rotatedHeight,
-    });
-    
-}*/
-
-/*
-// Function to fit image within the container without cropping
-function fitImageToContainer() {
-    if (window.cropper) {
-        const containerData = cropper.getContainerData();
-        const imageData = cropper.getImageData();
-
-        // Calculate the scale needed to fit the image within container
-        const scale = Math.min(
-            containerData.width / imageData.naturalWidth,
-            containerData.height / imageData.naturalHeight
-        );
-
-        cropper.setCanvasData({
-            left: (containerData.width - imageData.naturalWidth * scale) / 2,
-            top: (containerData.height - imageData.naturalHeight * scale) / 2,
-            width: imageData.naturalWidth * scale,
-            height: imageData.naturalHeight * scale,
-        });
-
-        // Ensure the image fits without cropping when rotated 180 degrees
-        if (imageData.rotate % 180 === 0) {
-            cropper.setCanvasData({
-                left: (containerData.width - imageData.naturalWidth * scale) / 2,
-                top: (containerData.height - imageData.naturalHeight * scale) / 2,
-                width: containerData.width,
-                height: containerData.height,
-            });
-        }
-    }
-} */
 
 function bindRotateEvents() {
     $('#rotateLeft').off('click').on('click', function () {
@@ -115,7 +60,9 @@ function bindRotateEvents() {
             window.cropper.rotate(-90);
             fitImageToContainer()
         } else {
-            alert('Cropper is not initialized.');
+            alert('Upload a Image.');
+            console.warn("Cropper is not initialized.");
+            
         }
     });
 
@@ -124,7 +71,8 @@ function bindRotateEvents() {
             window.cropper.rotate(90);
             fitImageToContainer()
         } else {
-            alert('Cropper is not initialized.');
+            alert('Upload a Image.');
+            console.warn("Cropper is not initialized.");
         }
     });
 
@@ -191,10 +139,7 @@ function uploadImage(files) {
         return;
     }
 
-
     $('#progressLoadingImg').removeClass('hidden');
-
-
     const formData = new FormData();
     formData.append('image', file);
 
@@ -371,12 +316,12 @@ $(document).ready(function () {
 
     console.log($image);
 
-    if ($image.length > 0 && $image[0] instanceof HTMLImageElement) {
-        // Initialize Cropper
-        initializeCropper($image[0])
-    } else {
-        console.error('Image element not found.');
-    }
+    // if ($image.length > 0 && $image[0] instanceof HTMLImageElement) {
+    //     // Initialize Cropper
+    //     initializeCropper($image[0])
+    // } else {
+    //     console.error('Image element not found.');
+    // }
 });
 
 
