@@ -37,12 +37,12 @@ function drop() {
     document.getElementById('uploadFile').parentNode.className = 'dragBox';
 }
 
-const mobileMenu = document.getElementById('mobile-menu');
-const navList = document.querySelector('.nav-list');
+// const mobileMenu = document.getElementById('mobile-menu');
+// const navList = document.querySelector('.nav-list');
 
-mobileMenu.addEventListener('click', () => {
-    navList.classList.toggle('show');
-});
+// mobileMenu.addEventListener('click', () => {
+//     navList.classList.toggle('show');
+// });
 
 function generateStars(rating) {
     let stars = '';

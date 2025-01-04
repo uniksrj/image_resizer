@@ -7,11 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('title')</title>
-    <link rel="icon" type="image/x-icon" href="{{asset('favicon(1).ico')}}">
-     <!-- SEO Meta Tags -->
-     <meta name="description" content="Enhance, edit, and create stunning visuals with Image Tools. Explore intuitive online tools for editing photos, creating designs, and optimizing images for web and print.">
-     <meta name="keywords" content="image editor, online image tool, photo editing, image optimization, free image tools, resize images, edit photos, copress image, image converter">
-     <meta name="author" content="unik srj">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon(1).ico') }}">
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Enhance, edit, and create stunning visuals with Image Tools. Explore intuitive online tools for editing photos, creating designs, and optimizing images for web and print.">
+    <meta name="keywords"
+        content="image editor, online image tool, photo editing, image optimization, free image tools, resize images, edit photos, copress image, image converter">
+    <meta name="author" content="unik srj">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -58,26 +60,38 @@
             <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;"
                     src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
         </div>
-        <div class="menu-toggle" id="mobile-menu">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
+        <div class="menu-toggle block md:hidden cursor-pointer" id="mobile-menu">
+            <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
+            <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
+            <span class="bar block w-6 h-1 bg-gray-800"></span>
         </div>
-        <ul class="nav-list">
+
+        <!-- Navigation Menu -->
+        <ul class="nav-list w-full hidden flex-col absolute md:hidden top-full left-0 text-white p-2 place-items-end space-y-2 bg-[rgb(25,135,84)]">
+            <li><a href="{{ route('home') }}" class="block">Image Resizer</a></li>
+            <li><a href="{{ route('crop_image') }}" class="block">Crop Image</a></li>
+            <li><a href="{{ route('compress_image') }}" class="block">Image Compressor</a></li>
+            <li><a href="{{ route('tool-view/1') }}" class="block">Rotate Image</a></li>
+            <li><a href="{{ route('flipPage') }}" class="block">Flip Image</a></li>
+            <li><a href="{{ route('converter-page') }}" class="block">Image Converter</a></li>
+        </ul>
+        
+        <!-- Desktop View -->
+        <ul class="nav-list hidden md:flex md:flex-row space-x-4">
             <li><a href="{{ route('home') }}">Image Resizer</a></li>
             <li><a href="{{ route('crop_image') }}">Crop Image</a></li>
             <li><a href="{{ route('compress_image') }}">Image Compressor</a></li>
-            <li class="dropdown">
-                <button class="dropbtn" onclick="showDropdown(event)">More
-                    <i class="fa fa-caret-down"></i>
+            <li class="dropdown relative">
+                <button class="dropbtn" onclick="showDropdown(event)">
+                    More <i class="fa fa-caret-down"></i>
                 </button>
-                <div class="dropdown-content">
-                    <a href="{{ route('tool-view/1') }}">Rotate Image</a>
-                    <a href="{{route('flipPage')}}">Flip Image</a>
-                    <a href="{{route('converter-page')}}">Image Converter</a>
+                <div class="dropdown-content w-[100px] hidden absolute top-14 left-[-160px] bg-green-500 text-white">
+                    <a href="{{ route('tool-view/1') }}" class="block px-4 py-2">Rotate Image</a>
+                    <a href="{{ route('flipPage') }}" class="block px-4 py-2">Flip Image</a>
+                    <a href="{{ route('converter-page') }}" class="block px-4 py-2">Image Converter</a>
                 </div>
             </li>
-        </ul>
+        </ul>       
     </nav>
 
 
@@ -112,7 +126,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="review" class="form-label">Your Review</label>
-                                <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review" required></textarea>
+                                <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review"
+                                    required></textarea>
                             </div>
                             <button type="submit" id="submit_form" class="btn btn-primary">Submit Review</button>
                         </form>
@@ -145,16 +160,18 @@
     <script type="module" src="{{ asset('js/nav.js') }}"></script>
     <script>
         function showDropdown(event) {
-            const dropdownContent = document.querySelector('.dropdown-content');
-            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-        }
-
-        window.onclick = function(e) {
-            const dropdownContent = document.querySelector('.dropdown-content');
-            if (!e.target.matches('.dropbtn')) {
-                dropdownContent.style.display = 'none';
+                const dropdownContent = document.querySelector('.dropdown-content');
+                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
             }
-        };
+            window.onclick = function(e) {
+                const dropdownContent = document.querySelector('.dropdown-content');
+                if (!e.target.matches('.dropbtn')) {
+                    dropdownContent.style.display = 'none';
+                }
+            };
+        document.getElementById('mobile-menu').addEventListener('click', function () {
+        document.querySelector('.nav-list').classList.toggle('hidden');
+    });
     </script>
 </body>
 

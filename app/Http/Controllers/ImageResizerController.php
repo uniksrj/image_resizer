@@ -134,11 +134,14 @@ class ImageResizerController extends Controller
         $reviewData->geolocation = $location;
         $reviewData->save();
         if (!empty($reviewData->id)) {
-           echo 1;
+            echo 1;
         }
     }
-    public function get_reviews() {
-        $reviews = reviewTable::all();
+    public function get_reviews()
+    {
+        $reviews = reviewTable::query()
+            ->orderBy('id', 'desc')
+            ->get();
         return response()->json($reviews);
     }
 }
