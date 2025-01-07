@@ -8,16 +8,6 @@
     font-weight: bold;
 }
 
-.footer a {
-    text-decoration: none;
-    color: #ffd700; /* Gold Links */
-    transition: color 0.3s;
-}
-
-.footer a:hover {
-    color: #e6c200; /* Darker Gold */
-}
-
 .footer-divider {
     border-top: 1px solid #ffd700; /* Gold Divider */
 }

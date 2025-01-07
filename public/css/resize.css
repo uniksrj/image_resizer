@@ -87,11 +87,11 @@
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
     }
-
+    
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 0.8rem;
     }
 
     .hero-btn {

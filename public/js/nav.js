@@ -117,13 +117,12 @@ function getReviewData() {
                             }
                         });
                     }
-
                     const reviewHTML = `
                         <div class="review-item">
                         <p class="">${generateStars(review.rating)}</p>
                         <p class="line-clamp-3">${review.review}</p>
-                        <p class="text-sm py-3 subpixel-antialiased"><strong>${review.username}</strong></p>
-                        <p >${city}/${country}</p>
+                        <p class="text-sm py-3 subpixel-antialiased"><strong>${review.username}</strong></p>                                            
+                        <p >  ${city}/${country}</p>
                         </div>
                     `;
                     $('#testimonialSlider').append(reviewHTML);

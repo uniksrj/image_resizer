@@ -10,13 +10,18 @@
             </p>
 
             <!-- Upload Feature -->
-            <div class="uploadOuter mt-4">
+            <div class="uploadOuter hidden lg:inline-block mt-4">
                 <label for="uploadFile" class="btn btn-secondary">Upload Image</label>
                 <strong class="mx-2">OR</strong>
                 <span class="dragBox">
                     Drag and Drop image here
                     <input type="file" ondragover="drag()" ondrop="drop()" id="uploadFile" />
                 </span>
+            </div>
+
+            {{-- //Mobile view --}}
+            <div class="uploadOuter lg:hidden mt-4">
+                <label for="uploadFile" class="btn btn-secondary">Upload Image</label>
             </div>
         </div>
         <div id="progressContainer" style="display: none; text-align: center; margin-top: 30px;">

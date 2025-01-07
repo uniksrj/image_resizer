@@ -68,7 +68,7 @@
             $heading = 'Your Convert image is ready to download!';
         }
     @endphp
-    <div style="text-align: center; padding: 50px;">
+    <div style="text-align: center; padding: 50px; md:h[720px]">
         <h1 class="d-head">{{ $heading }}</h1>
         <div class="container flex justify-center items-center">
             <img class="d-image" src="{{ asset('storage/uploads/' . $filename) }}" alt="Resized Image"

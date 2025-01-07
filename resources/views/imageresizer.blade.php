@@ -9,7 +9,7 @@
             </p>
 
             <!-- Upload Feature -->
-            <div class="uploadOuter mt-4">
+            <div class="uploadOuter hidden mt-4 lg:inline-block">
                 <label for="uploadFile" class="btn btn-secondary">Upload Image</label>
                 <strong class="mx-2">OR</strong>
                 <span class="dragBox">
@@ -17,13 +17,19 @@
                     <input type="file" ondragover="drag()" ondrop="drop()" id="uploadFile" />
                 </span>
             </div>
+            {{-- //Mobile view --}}
+            <div class="uploadOuter lg:hidden mt-4">
+                <label for="uploadFile" class="btn btn-secondary">Upload Image</label>
+            </div>
         </div>
         <div id="progressContainer" style="display: none; text-align: center; margin-top: 30px;">
-            <div style="width: 100%; background-color: #f3f3f3; border-radius: 5px; overflow: hidden; position: relative; height: 20px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);">
+            <div
+                style="width: 100%; background-color: #f3f3f3; border-radius: 5px; overflow: hidden; position: relative; height: 20px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);">
                 <div id="uploadProgressBar"
                     style="width: 0%; background-color: #28a745; height: 100%; transition: width 0.3s;"></div>
             </div>
-            <span id="progressText" style="display: block; margin-top: 10px; font-size: 14px; font-weight: bold;">Uploading...</span>
+            <span id="progressText"
+                style="display: block; margin-top: 10px; font-size: 14px; font-weight: bold;">Uploading...</span>
         </div>
         <div id="errorMessage" style="color: red; font-weight: bold; text-align: center; margin-top: 10px;"></div>
     </section>

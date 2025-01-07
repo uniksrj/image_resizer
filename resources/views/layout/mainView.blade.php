@@ -67,7 +67,7 @@
         </div>
 
         <!-- Navigation Menu -->
-        <ul class="nav-list w-full hidden flex-col absolute md:hidden top-full left-0 text-white p-2 place-items-end space-y-2 bg-[rgb(25,135,84)]">
+        <ul class="nav-list w-full hidden flex-col absolute md:hidden gap-0 top-[87px] left-0 text-white p-2 place-items-end space-y-2 bg-[rgb(25,135,84)]">
             <li><a href="{{ route('home') }}" class="block">Image Resizer</a></li>
             <li><a href="{{ route('crop_image') }}" class="block">Crop Image</a></li>
             <li><a href="{{ route('compress_image') }}" class="block">Image Compressor</a></li>
@@ -152,7 +152,7 @@
     <footer class="footer bg-success text-white py-2">
         <div class="container">
             <div class="text-center">
-                <p class="mb-0">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
+                <p class="mb-0 md:font-size[10px]">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
             </div>
         </div>
     </footer>

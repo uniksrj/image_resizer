@@ -1,7 +1,7 @@
 @extends('layout.mainView')
     @section('content')
     <div class="container">
-        <h1>Resize Your Image</h1>
+        <h1 class="font-size-42px text-pink md:font-size[32px]">Resize Your Image</h1>
         <div class="resize-container">
             <!-- Image Section -->
             <div class="image-section">                
@@ -9,7 +9,7 @@
             </div>
             
             <!-- Resize Tool Form Section -->
-            <div class="form-section">
+            <div class="form-section ">
                 <form id="resizeForm" method="POST" action="{{ route('resize-image') }}">
                     @csrf
                     <input type="hidden" name="filename" value="{{ $filename }}">
