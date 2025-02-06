@@ -26,6 +26,8 @@
 
 // Function to upload image with AJAX and show progress
 function uploadImage(file) {
+    $('#errorMessage').text('');
+    $('#progressContainer').css('display', 'none');
     var formData = new FormData();
     formData.append('image', file);
 
@@ -39,6 +41,7 @@ function uploadImage(file) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         xhr: function () {
+            $('#progressContainer').css('display', 'block');
             var xhr = new XMLHttpRequest();
             xhr.upload.onprogress = function (event) {
                 if (event.lengthComputable) {
@@ -63,6 +66,10 @@ function uploadImage(file) {
         error: function (xhr, status, erro) {
             console.log(erro);            
             $('#errorMessage').text(xhr.responseJSON?.message || 'An error occurred during the upload. Please try again.');
+            setTimeout(() => {
+                $('#errorMessage').text('');
+                $('#progressContainer').css('display', 'none');
+            },2000);
         }
     });
 }

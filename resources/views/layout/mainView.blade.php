@@ -85,7 +85,7 @@
                 <button class="dropbtn" onclick="showDropdown(event)">
                     More <i class="fa fa-caret-down"></i>
                 </button>
-                <div class="dropdown-content w-[100px] hidden absolute top-14 left-[-160px] bg-green-500 text-white">
+                <div class="dropdown-content w-[100px] hidden absolute top-14 left-[-160px] bg-[rgb(25 135 84)] text-white">
                     <a href="{{ route('tool-view/1') }}" class="block px-4 py-2">Rotate Image</a>
                     <a href="{{ route('flipPage') }}" class="block px-4 py-2">Flip Image</a>
                     <a href="{{ route('converter-page') }}" class="block px-4 py-2">Image Converter</a>

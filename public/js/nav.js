@@ -64,7 +64,12 @@ function submitFormData(formData) {
         contentType: false,
         success: function (response) {
             console.log(response);
+            $('#username').val('');
+            $('#rating').val('');
+            $('#review').val('');         
+
             getReviewData();
+
         },
         error: function (response) {
             alert('An error occurred');
