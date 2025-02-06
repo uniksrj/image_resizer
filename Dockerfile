@@ -1,5 +1,5 @@
 # Use the official PHP image from Docker Hub as a base image
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Install system dependencies and PHP extensions needed for Laravel
 RUN apt-get update && apt-get install -y \
