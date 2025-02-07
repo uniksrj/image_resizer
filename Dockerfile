@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Node.js and npm (for Laravel Mix / frontend assets)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
@@ -35,8 +35,11 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Install Node.js dependencies and build assets
-RUN npm install && npm run build
+# Install JavaScript libraries
+RUN npm install jquery cropperjs bootstrap axios vue
+
+# Build frontend assets
+RUN npm run build
 
 # Set permissions for Laravel storage & cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
