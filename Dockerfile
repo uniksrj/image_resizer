@@ -1,40 +1,40 @@
-# Use the official PHP image from Docker Hub as a base image
+# Use the official PHP image
 FROM php:8.2-fpm
 
-# Install system dependencies and PHP extensions needed for Laravel
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
-    zip \
-    git \
+    libzip-dev \
+    unzip \
     curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql bcmath opcache
+    git \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Composer (Dependency Manager for PHP)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install PHP extensions
+RUN docker-php-ext-install bcmath gd pdo pdo_mysql zip
 
-# Set the working directory inside the container
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
 WORKDIR /var/www
 
-# Copy the application files into the container
+# Copy existing application directory
 COPY . .
 
-# Install the Laravel dependencies using Composer
+# Install Laravel dependencies using Composer
 RUN composer install --no-dev --optimize-autoloader
 
+# Install npm dependencies and build frontend assets
+RUN npm install && npm run build
+
 # Set the correct permissions for Laravel storage and cache directories
-RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Generate Laravel application key (optional, but recommended)
-RUN php artisan key:generate
-
-# Run Laravel database migrations (optional)
-RUN php artisan migrate --force
-
-# Expose the port the app will run on
+# Expose port and start the PHP server
 EXPOSE 9000
-
-# Start the PHP-FPM server (PHP FastCGI Process Manager)
 CMD ["php-fpm"]
