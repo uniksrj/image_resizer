@@ -1,4 +1,3 @@
-@@ -0,0 +1,20 @@
 FROM richarvey/nginx-php-fpm:1.7.2
 COPY . .
 # Image config
