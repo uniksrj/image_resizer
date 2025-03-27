@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompressImage;
 use App\Http\Controllers\CropImageController;
+use App\Http\Controllers\ExifController;
 use App\Http\Controllers\ImageResizerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -94,3 +95,9 @@ Route::post('/save-flip-image', [CropImageController::class, 'saveFlipImage']);
 //Image Converter
 Route::get('/converter-page', [CropImageController::class, 'converter'])->name('converter-page');
 Route::post('/save-convert-image', [CropImageController::class, 'saveConvertImage']);
+
+
+//exif page route
+Route::get('/exif-page', [ExifController::class, 'exifViewPage'])->name('exif-page');
+
+Route::get('/get-exif', [ExifController::class, 'getExifData']);

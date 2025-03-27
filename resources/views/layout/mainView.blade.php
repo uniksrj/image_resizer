@@ -89,6 +89,7 @@
                     <a href="{{ route('tool-view/1') }}" class="block px-4 py-2">Rotate Image</a>
                     <a href="{{ route('flipPage') }}" class="block px-4 py-2">Flip Image</a>
                     <a href="{{ route('converter-page') }}" class="block px-4 py-2">Image Converter</a>
+                    <a href="{{ route('exif-page') }}" class="block px-4 py-2">Get meta Details</a>
                 </div>
             </li>
         </ul>       

@@ -1,15 +1,28 @@
-FROM richarvey/nginx-php-fpm:1.7.2
+# Use an official PHP image with required extensions
+FROM php:8.2-fpm
+
+# Set working directory inside the container
+WORKDIR /var/www
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    zip unzip curl git libpng-dev libjpeg-dev libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql mbstring bcmath
+
+# Install Composer globally
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy Laravel application files to the container
 COPY . .
-# Image config
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
-# Laravel config
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
-# Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER 1
-CMD ["/start.sh"]
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Set correct permissions for Laravel
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
+
+CMD ["php-fpm"]
