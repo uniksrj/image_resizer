@@ -47,26 +47,22 @@
             
             <div class="w-full shadow rounded-lg mb-5"></div>
 
-            <div class="w-full shadow rounded-lg mb-3">
-                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-file-arrow-down  btn-md text-blue-500"></i> Download Meta Details</button>
+            <div class="findMe w-full shadow rounded-lg mb-3">
+                <button id="downloadMetaButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"> <i class="fa-solid fa-file-arrow-down  btn-md text-blue-500"></i> Download Meta Details</button>
             </div>
-            <div class="w-full shadow rounded-lg mb-3">
-                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-eye btn-md text-blue-500"></i> View Meta Details</button>
+            <span class="error"></span>
+            <div class="findMe w-full shadow rounded-lg mb-3">
+                <button id="viewMetaButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-eye btn-md text-blue-500"></i> View Meta Details</button>
             </div>
-            <div class="w-full shadow rounded-lg mb-3">
-                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-trash btn-md text-red-400"></i> Remove Meta Details</button>
+            <span class="error"></span>
+            <div class="findMe w-full shadow rounded-lg mb-3">
+                <button id="removeMetaButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-trash btn-md text-red-400"></i> Remove Meta Details</button>
             </div>
-            <div class="w-full shadow rounded-lg mb-3">
-                <button id="resetButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-map-location-dot btn-md text-green-400"></i> Locate the Image Place</button>
+            <span class="error"></span>
+            <div class="findMe w-full shadow rounded-lg mb-3">
+                <button id="locateButton" class="w-full h-10 bg-white rounded-lg cursor-pointer text-black"><i class="fa-solid fa-map-location-dot btn-md text-green-400"></i> Locate the Image Place</button>
             </div>
-            <hr class="border-3">
-            <div class="w-11/12 mt-10 absolute inset-x-4 bottom-6">
-                <div class="w-full shadow rounded-lg">
-                    <button id="process_data"
-                        class="w-full h-16 bg-sky-400 rounded-lg cursor-pointer text-white text-lg antialiased font-bold">Process
-                        Image</button>
-                </div>
-            </div>
+            <span class="error"></span>
         </aside>
 
         <!-- Main Content -->
@@ -89,7 +85,7 @@
             <div id="loader"></div>
         </div>  
     </div>
-    {{-- <script type="module" src="{{ asset('js/flip.js') }}"></script> --}}
+    <script type="module" src="{{ asset('js/exif.js') }}"></script>
 @endsection
 
 @section('title')

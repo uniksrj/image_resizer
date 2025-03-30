@@ -98,6 +98,10 @@ Route::post('/save-convert-image', [CropImageController::class, 'saveConvertImag
 
 
 //exif page route
+Route::post('/save-exif',[ExifController::class,"save_image"]);
 Route::get('/exif-page', [ExifController::class, 'exifViewPage'])->name('exif-page');
-
 Route::get('/get-exif', [ExifController::class, 'getExifData']);
+Route::post('/get-meta', [ExifController::class, 'getMetadata']);
+Route::get('/download-meta/{filename}', [ExifController::class, 'downloadMetadata'])->name('download.metadata');
+Route::get('/remove-meta/{filename}', [ExifController::class, 'removeMetadata'])->name('remove.metadata');
+Route::get('/view-location/{filename}', [ExifController::class, 'viewLocation'])->name('view.location');
