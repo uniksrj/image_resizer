@@ -40,7 +40,7 @@ Route::get('/secure-crop-image/{filename}', function ($filename) {
 
 Route::post('/save-cropped-image', [CropImageController::class, 'saveCroppedImage'])->name('save.cropped.image');
 
-Route::get('/download-page/{filename}', [CropImageController::class, "Downloadview"])->name('download_page');
+// Route::get('/download-page/{filename}', [CropImageController::class, "Downloadview"])->name('download_page');
 Route::post('/download-page', function (Request $request) {
     $filename = $request->input('filename'); 
     
