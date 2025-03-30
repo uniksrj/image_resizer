@@ -35,7 +35,6 @@ class ExifController extends Controller
 
         $request->file('image')->storeAs($directory, $cleanText, 'public');
 
-
         return response()->json(['success' => true, 'path' => asset('storage/' . $directory . '/' . $cleanText)]);
     }
 
@@ -57,7 +56,7 @@ class ExifController extends Controller
         }
     }
 
-    public function to_get_shell_command($filename, $path)
+    private function to_get_shell_command($filename, $path)
     {
         // Run ExifTool to extract ALL metadata
         $exiftoolOutput = shell_exec("exiftool -json " . escapeshellarg($path));
@@ -83,12 +82,17 @@ class ExifController extends Controller
         ];
     }
 
+    private function getImagePath($filename)
+    {
+        $directory = 'uploads/exif_image/';
+        return Storage::disk('public')->path($directory . $filename);
+    }
+
     // Get Metadata
     public function getMetadata(Request $request)
     {
         $filename = $request->input('filename');
-        $directory = 'uploads/exif_image/';
-        $path = Storage::disk('public')->path($directory . $filename);
+        $path = $this->getImagePath($filename);
 
         if (!file_exists($path)) {
             return response()->json(['error' => 'File not found'], 404);
@@ -104,16 +108,13 @@ class ExifController extends Controller
     // Download Metadata as JSON
     public function downloadMetadata($filename)
     {
-        $directory = 'uploads/exif_image/';
-        $path = Storage::disk('public')->path($directory . $filename);
-
-
+        $path = $this->getImagePath($filename);
         if (!file_exists($path)) {
             return response()->json(['error' => 'File not found'], 404);
         }
 
         $metaData = $this->to_get_shell_command($filename, $path);
-        $pdf = app(PDF::class)->loadView('exif_controller.metapdf',$metaData);
+        $pdf = app(PDF::class)->loadView('exif_controller.metapdf', $metaData);
         $pdf->setPaper('A4', 'portrait');
         $pdf->setOptions(['defaultFont' => 'sans-serif']);
         $pdf->setWarnings(false);
@@ -132,31 +133,33 @@ class ExifController extends Controller
         return $pdf->download($filename . '.pdf');
     }
 
+
+
     // Remove Metadata (Creates a New Image Without EXIF)
     public function removeMetadata($filename)
     {
-        $path = storage_path("app/public/uploads/$filename");
+        $path = $this->getImagePath($filename);
 
         if (!file_exists($path)) {
             return response()->json(['error' => 'File not found'], 404);
         }
 
-        $image = imagecreatefromjpeg($path);
-        if (!$image) {
-            return response()->json(['error' => 'Failed to process image']);
-        }
+        shell_exec("exiftool -all= -overwrite_original -q " . escapeshellarg($path));     
 
-        $newPath = storage_path("app/public/uploads/no_meta_$filename");
-        imagejpeg($image, $newPath, 100); // Save without EXIF
-        imagedestroy($image);
-
-        return response()->json(['message' => 'Metadata removed', 'new_image' => "/storage/uploads/no_meta_$filename"]);
+        return response()->download($path, $filename, [
+            'Content-Type' => 'image/jpeg',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+        ])->deleteFileAfterSend(true);
+    // return response()->json(['message' => 'Metadata removed successfully']);
+    
     }
+
+
 
     // View GPS Location
     public function viewLocation($filename)
     {
-        $path = storage_path("app/public/uploads/$filename");
+        $path = $this->getImagePath($filename);
 
         if (!file_exists($path)) {
             return response()->json(['error' => 'File not found'], 404);
@@ -167,11 +170,10 @@ class ExifController extends Controller
             return response()->json(['error' => 'No GPS metadata found']);
         }
 
-        // Convert GPS data to decimal format
         $lat = $this->convertGpsToDecimal($exifData['GPSLatitude'], $exifData['GPSLatitudeRef']);
         $lng = $this->convertGpsToDecimal($exifData['GPSLongitude'], $exifData['GPSLongitudeRef']);
 
-        return redirect("https://www.google.com/maps/search/?api=1&query=$lat,$lng");
+        return json_encode(array("url"=>"https://www.google.com/maps/search/?api=1&query=$lat,$lng"));
     }
 
     // Convert GPS Format to Decimal

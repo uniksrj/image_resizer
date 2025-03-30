@@ -7,7 +7,7 @@ function initializeCropper(imageElement) {
         viewMode: 1,             // Only dragging allowed
         dragMode: 'move',        // Enable dragging only
         responsive: true,        // Maintain aspect ratio when resizing container
-        aspectRatio: 16 / 9,     // Maintain a specific aspect ratio
+        // aspectRatio: 16 / 9,     // Maintain a specific aspect ratio
         movable: false,
         zoomable: false,
         autoCrop: false,       // Disable zoom
@@ -27,7 +27,6 @@ function uploadImage(files) {
     }
 
     const file = files[0];
-    console.log(file);
     if (!file.type.startsWith('image/')) {
         alert('Please upload an image file.');
         return;
@@ -177,8 +176,6 @@ $(document).ready(function () {
     };
 
     $(document).on('click', '#downloadMetaButton', function () {
-        let closser = $(this).closest('.findMe').next('span');
-        console.log($image[0]);
         let imageurl = $image[0].src;
         const urlObj = new URL(imageurl);
         const filename = urlObj.pathname.split('/').pop();
@@ -186,8 +183,6 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#viewMetaButton', function () {
-        let closser = $(this).closest('.findMe').next('span');
-        console.log($image[0]);
         let imageurl = $image[0].src;
         const urlObj = new URL(imageurl);
         const filename = urlObj.pathname.split('/').pop();
@@ -211,18 +206,34 @@ $(document).ready(function () {
             error: function (error) {
                 alert('Error While fetching details. Please try again.');
                 console.error("Error:", error);
-                // Handle error response here if needed
 
             },
         });
     });
 
     $(document).on('click', '#removeMetaButton', function () {
-        // Perform image processing operations here
+        let imageurl = $image[0].src;
+        const urlObj = new URL(imageurl);
+        const filename = urlObj.pathname.split('/').pop();
+        window.location.href = `/remove-meta/${filename}`;
     });
 
     $(document).on('click', '#locateButton', function () {
-        // Perform image processing operations here
+        let imageurl = $image[0].src;
+        const urlObj = new URL(imageurl);
+        const filename = urlObj.pathname.split('/').pop();
+        $.ajax({
+            url: `/view-location/${filename}`,
+            type: "GET",
+            success: function(response) {
+                if(response.error){
+                    alert(response.error);
+                    return;
+                }
+                let obj = JSON.parse(response);                
+                window.open(obj.url, "_blank"); 
+            }
+        });
     });
 
 });

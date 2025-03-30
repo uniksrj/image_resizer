@@ -153,7 +153,8 @@
     <footer class="footer bg-success text-white py-2">
         <div class="container">
             <div class="text-center">
-                <p class="mb-0 md:font-size[10px]">© 2024 Image Tools. Trustworthy resizing for everyone!</p>
+
+                <p class="mb-0 md:font-size[10px]">© <?php echo date("Y"); ?> Image Tools. Your all-in-one solution for compression, rotation, metadata, and more!</p>
             </div>
         </div>
     </footer>

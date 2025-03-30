@@ -1,0 +1,60 @@
+  /*
+        // Detect file type
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        switch ($extension) {
+            case 'jpeg':
+            case 'jpg':
+                $image = imagecreatefromjpeg($path);
+                break;
+            case 'png':
+                $image = imagecreatefrompng($path);
+                break;
+            case 'gif':
+                $image = imagecreatefromgif($path);
+                break;
+            case 'webp':
+                $image = imagecreatefromwebp($path);
+                break;
+            default:
+                return response()->json(['error' => 'Unsupported image format'], 400);
+        }
+
+        if (!$image) {
+            return response()->json(['error' => 'Failed to process image'], 500);
+        }
+
+        // Ensure the directory exists
+        $directory = storage_path('app/public/uploads/meta_remove_exif_image/');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        // Create new filename
+        $timestamp = now()->format('YmdHis');
+        $nameWithoutExt = pathinfo($filename, PATHINFO_FILENAME);
+        $newFilename = $nameWithoutExt . "_no_meta_" . $timestamp . '.' . $extension;
+        $newPath = $directory . $newFilename;
+
+        // Save image based on type
+        $saveSuccess = false;
+        switch ($extension) {
+            case 'jpeg':
+            case 'jpg':
+                $saveSuccess = imagejpeg($image, $newPath, 100);
+                break;
+            case 'png':
+                $saveSuccess = imagepng($image, $newPath);
+                break;
+            case 'gif':
+                $saveSuccess = imagegif($image, $newPath);
+                break;
+            case 'webp':
+                $saveSuccess = imagewebp($image, $newPath);
+                break;
+        }
+
+        imagedestroy($image);
+*/
+        // if (!$saveSuccess) {
+        //     return response()->json(['error' => 'Failed to save image'], 500);
+        // }
