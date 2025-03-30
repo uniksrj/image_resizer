@@ -83,7 +83,6 @@ function getReviewData() {
         url: '/get-all-data',
         type: 'GET',
         success: function (response) {
-            console.log(response);
             if (response.length > 0) {
                 response.forEach((review) => {
 

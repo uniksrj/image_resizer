@@ -48,23 +48,23 @@
             <div class="w-full justify-center flex gap-7">
                 <div class="w-5/12 h-max border rounded-md bg-white justify-center flex shadow-sm space-x-6">
                     <button id="rotateRight" class="w-24 h-24 text-black flex items-center justify-center">
-                        <i class="fa-solid fa-rotate-right text-4xl"></i>
+                        <i class="fa-solid fa-rotate-right text-4xl text-blue-400"></i>
                     </button>
                 </div>
                 <div class=" w-5/12 h-max bg-white rounded-md border shadow-sm justify-center flex space-x-6 ">
                     <button id="rotateLeft" class="w-24 h-24 text-black flex items-center justify-center ">
-                        <i class="fa-solid fa-rotate-left text-4xl"></i>
+                        <i class="fa-solid fa-rotate-left text-4xl text-blue-400"></i>
                     </button>
                 </div>
             </div>
-            <div class="w-full justify-center flex gap-7">
+            {{-- <div class="w-full justify-center flex gap-7">
                 <div class="w-2/5 h-max justify-center flex space-x-6 my-2">
-                    <span class="text-sm justify-center font-bold text-shadow-lg text-black">clock wise</span>
+                    <span class="text-xs justify-center font-bold text-shadow-lg text-black">clock wise</span>
                 </div>
                 <div class=" w-2/5 h-max justify-center flex space-x-6 my-2">
-                    <span class="text-sm justify-center font-bold text-shadow-lg text-black">counter clock wise</span>
+                    <span class="text-xs justify-center font-bold text-shadow-lg text-black">counter clock wise</span>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="w-full p-6 bg-white shadow rounded-lg my-3">
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Straighten</h2>
