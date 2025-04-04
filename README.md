@@ -88,11 +88,11 @@ Contributing
 
 + Create a new branch:
 
-git checkout -b feature-name
++ git checkout -b feature-name
 
 + Make your changes and commit:
 
-git commit -m "Added new feature"
++ git commit -m "Added new feature"
 
 + Push to your fork and submit a pull request.
 ```
