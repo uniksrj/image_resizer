@@ -49,16 +49,19 @@ Node.js & npm (if using frontend frameworks)
 # Clone the repository:
 
 git clone https://github.com/uniksrj/image_resizer.git
+
 cd image_resizer
 
 # Install dependencies:
 
 composer install
+
 npm install If using frontend frameworks
 
 Configure .env file:
 
 cp .env.example .env
+
 php artisan key:generate
 
 # Set up database and run migrations:
