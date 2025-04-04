@@ -1,4 +1,4 @@
-#### Image Tool - Crop, Resize, Compress, Rotate & Edit Metadata
+# Image Tool - Crop, Resize, Compress, Rotate & Edit Metadata
 
 # Overview
 
