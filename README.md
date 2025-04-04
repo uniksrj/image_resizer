@@ -30,7 +30,7 @@ Database: MySQL, PostgreSQL (if applicable)
 
 # Installation
 
-# Follow these steps to set up the project locally:
+Follow these steps to set up the project locally:
 
 # Prerequisites
 
@@ -53,8 +53,8 @@ cd image_resizer
 
 # Install dependencies:
 
-# composer install
-npm install  # If using frontend frameworks
+composer install
+npm install If using frontend frameworks
 
 Configure .env file:
 
@@ -81,17 +81,17 @@ Contributing
 
 # Contributions are welcome! Follow these steps to contribute:
 
-# Fork the repository.
+<span style="color : green;">Fork the repository.</span>
 
-# Create a new branch:
+<span style="color : green;">Create a new branch:</span>
 
 git checkout -b feature-name
 
-# Make your changes and commit:
+<span style="color : green;">Make your changes and commit:</span>
 
 git commit -m "Added new feature"
 
-# Push to your fork and submit a pull request.
+<span style="color : green;">Push to your fork and submit a pull request.</span>
 
 # Author
 
