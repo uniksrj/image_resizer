@@ -10,7 +10,7 @@ class DesktopOnlyMiddleware
 {
     /**
      * Handle an incoming request.
-     *
+     * postgresql://neondb_owner:npg_9QfFoam4RhHE@ep-solitary-math-a1xpbv7l-pooler.ap-southeast-1.aws.neon.tech/imagetool?sslmode=require
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
