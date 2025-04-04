@@ -83,18 +83,19 @@ Download the edited image with desired modifications.
 Contributing
 
 # Contributions are welcome! Follow these steps to contribute:
+```diff
++ Fork the repository.
 
-<span style="color : green;">Fork the repository.</span>
-
-<span style="color : green;">Create a new branch:</span>
++ Create a new branch:
 
 git checkout -b feature-name
 
-<span style="color : green;">Make your changes and commit:</span>
++ Make your changes and commit:
 
 git commit -m "Added new feature"
 
-<span style="color : green;">Push to your fork and submit a pull request.</span>
++ Push to your fork and submit a pull request.
+```
 
 # Author
 
