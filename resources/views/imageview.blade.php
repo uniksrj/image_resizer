@@ -1,7 +1,7 @@
 @extends('layout.mainView')
     @section('content')
     <div class="container">
-        <h1 class="font-size-42px text-pink md:font-size[32px]">Resize Your Image</h1>
+        <h1 class="text-3xl font-bold text-green-700 md:font-size[32px] mb-6">Resize Your Image</h1>
         <div class="resize-container">
             <!-- Image Section -->
             <div class="image-section">                

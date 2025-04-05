@@ -34,6 +34,12 @@
 </head>
 
 <style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+    }
+
     body {
         font-family: "Roboto Slab", serif;
         -webkit-font-smoothing: auto;
@@ -42,119 +48,132 @@
         /* font-optical-sizing: auto; */
         font-weight: 400;
         font-style: normal;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .content {
+      flex: 1; 
     }
 </style>
 
 <body>
-    @if ($errors->any())
-        <div class="alert alert-danger " style="padding: 0px !important; margin: 0px !important; text-align: center;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+    <div class="content">
+        @if ($errors->any())
+            <div class="alert alert-danger "
+                style="padding: 0px !important; margin: 0px !important; text-align: center;">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <nav class="navbar">
+            <div class="logo">
+                <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;"
+                        src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
+            </div>
+            <div class="menu-toggle block md:hidden cursor-pointer" id="mobile-menu">
+                <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
+                <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
+                <span class="bar block w-6 h-1 bg-gray-800"></span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <ul
+                class="nav-list w-full hidden flex-col absolute md:hidden gap-0 top-[87px] left-0 text-white p-2 place-items-end space-y-2 bg-[rgb(25,135,84)]">
+                <li><a href="{{ route('home') }}" class="block">Image Resizer</a></li>
+                <li><a href="{{ route('crop_image') }}" class="block">Crop Image</a></li>
+                <li><a href="{{ route('compress_image') }}" class="block">Image Compressor</a></li>
+                <li><a href="{{ route('tool-view/1') }}" class="block">Rotate Image</a></li>
+                <li><a href="{{ route('flipPage') }}" class="block">Flip Image</a></li>
+                <li><a href="{{ route('converter-page') }}" class="block">Image Converter</a></li>
+                <li><a href="{{ route('exif-page') }}" class="block px-4 py-2">Get meta Details</a></li>
             </ul>
-        </div>
-    @endif
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;"
-                    src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
-        </div>
-        <div class="menu-toggle block md:hidden cursor-pointer" id="mobile-menu">
-            <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
-            <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
-            <span class="bar block w-6 h-1 bg-gray-800"></span>
-        </div>
 
-        <!-- Navigation Menu -->
-        <ul class="nav-list w-full hidden flex-col absolute md:hidden gap-0 top-[87px] left-0 text-white p-2 place-items-end space-y-2 bg-[rgb(25,135,84)]">
-            <li><a href="{{ route('home') }}" class="block">Image Resizer</a></li>
-            <li><a href="{{ route('crop_image') }}" class="block">Crop Image</a></li>
-            <li><a href="{{ route('compress_image') }}" class="block">Image Compressor</a></li>
-            <li><a href="{{ route('tool-view/1') }}" class="block">Rotate Image</a></li>
-            <li><a href="{{ route('flipPage') }}" class="block">Flip Image</a></li>
-            <li><a href="{{ route('converter-page') }}" class="block">Image Converter</a></li>
-        </ul>
-        
-        <!-- Desktop View -->
-        <ul class="nav-list hidden md:flex md:flex-row space-x-4">
-            <li><a href="{{ route('home') }}">Image Resizer</a></li>
-            <li><a href="{{ route('crop_image') }}">Crop Image</a></li>
-            <li><a href="{{ route('compress_image') }}">Image Compressor</a></li>
-            <li class="dropdown relative">
-                <button class="dropbtn" onclick="showDropdown(event)">
-                    More <i class="fa fa-caret-down"></i>
-                </button>
-                <div class="dropdown-content w-[100px] hidden absolute top-14 left-[-160px] bg-[rgb(25 135 84)] text-white">
-                    <a href="{{ route('tool-view/1') }}" class="block px-4 py-2">Rotate Image</a>
-                    <a href="{{ route('flipPage') }}" class="block px-4 py-2">Flip Image</a>
-                    <a href="{{ route('converter-page') }}" class="block px-4 py-2">Image Converter</a>
-                    <a href="{{ route('exif-page') }}" class="block px-4 py-2">Get meta Details</a>
-                </div>
-            </li>
-        </ul>       
-    </nav>
-
-
-    @yield('content')
-
-    @yield('feature')
-
-    @if (!request()->has('expires'))
-        @if (Request::route()->getName() === 'home')
-            <section class="reviews-section py-5">
-                <div class="container">
-                    <h2 class="text-center reviews-title mb-4">What Our Users Say</h2>
-                    <!-- Rating and Review Form -->
-                    <div class="review-form p-4">
-                        <h4 class="mb-3">Leave a Review</h4>
-                        <form id="reviewForm">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" name="username" id="username"
-                                    placeholder="Enter your name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rating" class="form-label">Rating</label>
-                                <select class="form-select" name="rating" id="rating" required>
-                                    <option value="" disabled selected>Select your rating</option>
-                                    <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
-                                    <option value="4">⭐⭐⭐⭐ - Very Good</option>
-                                    <option value="3">⭐⭐⭐ - Good</option>
-                                    <option value="2">⭐⭐ - Fair</option>
-                                    <option value="1">⭐ - Poor</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="review" class="form-label">Your Review</label>
-                                <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review"
-                                    required></textarea>
-                            </div>
-                            <button type="submit" id="submit_form" class="btn btn-primary">Submit Review</button>
-                        </form>
+            <!-- Desktop View -->
+            <ul class="nav-list hidden md:flex md:flex-row space-x-4">
+                <li><a href="{{ route('home') }}">Image Resizer</a></li>
+                <li><a href="{{ route('crop_image') }}">Crop Image</a></li>
+                <li><a href="{{ route('compress_image') }}">Image Compressor</a></li>
+                <li class="dropdown relative">
+                    <button class="dropbtn" onclick="showDropdown(event)">
+                        More <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div
+                        class="dropdown-content w-[100px] hidden absolute top-14 left-[-160px] bg-[rgb(25 135 84)] text-white">
+                        <a href="{{ route('tool-view/1') }}" class="block px-4 py-2">Rotate Image</a>
+                        <a href="{{ route('flipPage') }}" class="block px-4 py-2">Flip Image</a>
+                        <a href="{{ route('converter-page') }}" class="block px-4 py-2">Image Converter</a>
+                        <a href="{{ route('exif-page') }}" class="block px-4 py-2">Get meta Details</a>
                     </div>
+                </li>
+            </ul>
+        </nav>
 
-                    <!-- Display User Reviews -->
-                    <div id="reviewsDisplay" class="mt-5">
-                        <h4 class="text-center reviews-title">User Reviews</h4>
-                        {{-- <div  id="reviewContainer"  class="review-box">
+
+        @yield('content')
+
+        @yield('feature')
+
+        @if (!request()->has('expires'))
+            @if (Request::route()->getName() === 'home')
+                <section class="reviews-section py-5">
+                    <div class="container">
+                        <h2 class="text-center reviews-title mb-4">What Our Users Say</h2>
+                        <!-- Rating and Review Form -->
+                        <div class="review-form p-4">
+                            <h4 class="mb-3">Leave a Review</h4>
+                            <form id="reviewForm">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" name="username" id="username"
+                                        placeholder="Enter your name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rating" class="form-label">Rating</label>
+                                    <select class="form-select" name="rating" id="rating" required>
+                                        <option value="" disabled selected>Select your rating</option>
+                                        <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                                        <option value="4">⭐⭐⭐⭐ - Very Good</option>
+                                        <option value="3">⭐⭐⭐ - Good</option>
+                                        <option value="2">⭐⭐ - Fair</option>
+                                        <option value="1">⭐ - Poor</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="review" class="form-label">Your Review</label>
+                                    <textarea class="form-control" name="review" id="review" rows="4" placeholder="Write your review"
+                                        required></textarea>
+                                </div>
+                                <button type="submit" id="submit_form" class="btn btn-primary">Submit
+                                    Review</button>
+                            </form>
+                        </div>
+
+                        <!-- Display User Reviews -->
+                        <div id="reviewsDisplay" class="mt-5">
+                            <h4 class="text-center reviews-title">User Reviews</h4>
+                            {{-- <div  id="reviewContainer"  class="review-box">
                         <p>No reviews yet. Be the first to leave a review!</p>
                     </div> --}}
-                        <div id="testimonialSlider" class="testimonial-slider">
+                            <div id="testimonialSlider" class="testimonial-slider">
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            @endif
         @endif
-    @endif
 
-
+    </div>
 
     <footer class="footer bg-success text-white py-2">
         <div class="container">
             <div class="text-center">
 
-                <p class="mb-0 md:font-size[10px]">© <?php echo date("Y"); ?> Image Tools. Your all-in-one solution for compression, rotation, metadata, and more!</p>
+                <p class="mb-0 md:font-size[10px]">© <?php echo date('Y'); ?> Image Tools. Your all-in-one solution for
+                    compression, rotation, metadata, and more!</p>
             </div>
         </div>
     </footer>
@@ -162,18 +181,18 @@
     <script type="module" src="{{ asset('js/nav.js') }}"></script>
     <script>
         function showDropdown(event) {
-                const dropdownContent = document.querySelector('.dropdown-content');
-                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+            const dropdownContent = document.querySelector('.dropdown-content');
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
+        window.onclick = function(e) {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            if (!e.target.matches('.dropbtn')) {
+                dropdownContent.style.display = 'none';
             }
-            window.onclick = function(e) {
-                const dropdownContent = document.querySelector('.dropdown-content');
-                if (!e.target.matches('.dropbtn')) {
-                    dropdownContent.style.display = 'none';
-                }
-            };
-        document.getElementById('mobile-menu').addEventListener('click', function () {
-        document.querySelector('.nav-list').classList.toggle('hidden');
-    });
+        };
+        document.getElementById('mobile-menu').addEventListener('click', function() {
+            document.querySelector('.nav-list').classList.toggle('hidden');
+        });
     </script>
 </body>
 
