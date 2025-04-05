@@ -1,4 +1,9 @@
 var $image = $('#uploadedImage');
+let baseRotation = 0;
+let currentScale = 1;
+var storeAngle = 0;
+let currentZoomLevel = 1;
+let isFirstMovement = true;
 function initializeCropper(imageElement) {
     if (window.cropper) {
         window.cropper.destroy();
@@ -6,8 +11,7 @@ function initializeCropper(imageElement) {
     window.cropper = new Cropper(imageElement, {
         viewMode: 2,
         background: false,
-        autoCrop: false,
-        // cropBoxResizable: false,
+        autoCrop: false,    
         cropBoxMovable: false,
         dragMode: 'none',
         responsive: false,
@@ -19,60 +23,99 @@ function initializeCropper(imageElement) {
         },
     });
 }
+
 function fitImageToContainer() {
-    if (window.cropper) {
+    if (!window.cropper) return;
+
+    const cropper = window.cropper;
+
+    setTimeout(() => {
         const containerData = cropper.getContainerData();
         const imageData = cropper.getImageData();
 
-        console.log("Container Dimensions:", containerData);
-        console.log("Image Dimensions:", imageData);
+        const rotation = imageData.rotate % 180 !== 0;
+        const width = rotation ? imageData.naturalHeight : imageData.naturalWidth;
+        const height = rotation ? imageData.naturalWidth : imageData.naturalHeight;
 
-        // Calculate scale to fit the image inside the container
-        const scaleX = containerData.width / imageData.naturalWidth;
-        const scaleY = containerData.height / imageData.naturalHeight;
+        const scaleX = containerData.width / width;
+        const scaleY = containerData.height / height;
         const scale = Math.min(scaleX, scaleY);
 
-        // Calculate adjusted dimensions
-        const adjustedWidth = imageData.naturalWidth * scale;
-        const adjustedHeight = imageData.naturalHeight * scale;
+        const adjustedWidth = width * scale;
+        const adjustedHeight = height * scale;
 
-        // Center the image within the container
         const offsetX = (containerData.width - adjustedWidth) / 2;
         const offsetY = (containerData.height - adjustedHeight) / 2;
-
-        // Set the canvas data to match the container
         cropper.setCanvasData({
             left: offsetX,
             top: offsetY,
             width: adjustedWidth,
             height: adjustedHeight,
         });
-        cropper.clear(); 
-        bindRotateEvents();
-    }
+
+        cropper.clear();
+    }, 100);
+
 }
 
+function scaleImageToFillAfterRotation(cropper) {
+    const container = cropper.getContainerData();
+    const imageData = cropper.getImageData();
 
+    // Compute bounding box of rotated image
+    const angleInRadians = (imageData.rotate || 0) * Math.PI / 180;
+    const cos = Math.abs(Math.cos(angleInRadians));
+    const sin = Math.abs(Math.sin(angleInRadians));
+
+    const rotatedWidth = imageData.naturalWidth * cos + imageData.naturalHeight * sin;
+    const rotatedHeight = imageData.naturalWidth * sin + imageData.naturalHeight * cos;
+
+    const scaleX = container.width / rotatedWidth;
+    const scaleY = container.height / rotatedHeight;
+    console.log("scaleX: ", scaleX);
+    console.log("scaleY: ", scaleY);
+
+    const finalScale = Math.max(scaleX, scaleY);
+
+    // Calculate new canvas size
+    const adjustedWidth = imageData.naturalWidth * finalScale;
+    const adjustedHeight = imageData.naturalHeight * finalScale;
+
+    // Center the image within the container
+    const offsetX = (container.width - adjustedWidth) / 2;
+    const offsetY = (container.height - adjustedHeight) / 2;
+
+    cropper.setCanvasData({
+        left: offsetX,
+        top: offsetY,
+        width: adjustedWidth,
+        height: adjustedHeight,
+    });
+
+    // cropper.scale(finalScale); 
+    currentScale = finalScale;
+}
 
 function bindRotateEvents() {
     $('#rotateLeft').off('click').on('click', function () {
         if (window.cropper) {
-            window.cropper.rotate(-90);
-            fitImageToContainer()
-        } else {
-            alert('Upload a Image.');
-            console.warn("Cropper is not initialized.");
-            
+            baseRotation = (baseRotation - 90 + 360) % 360;
+            storeAngle = baseRotation;
+            cropper.rotateTo(baseRotation);
+            fitImageToContainer();
+            $('#colorSlider').val(0);
+            $('#degree').html(`0 &deg;`);
         }
     });
 
     $('#rotateRight').off('click').on('click', function () {
         if (window.cropper) {
-            window.cropper.rotate(90);
-            fitImageToContainer()
-        } else {
-            alert('Upload a Image.');
-            console.warn("Cropper is not initialized.");
+            baseRotation = (baseRotation + 90) % 360;
+            storeAngle = baseRotation;
+            cropper.rotateTo(baseRotation);
+            fitImageToContainer();
+            $('#colorSlider').val(0);
+            $('#degree').html(`0 &deg;`);
         }
     });
 
@@ -80,53 +123,57 @@ function bindRotateEvents() {
         if (window.cropper) {
             window.cropper.reset();
         }
+        baseRotation = 0;
+        currentScale = 1;
+        storeAngle = 0;
         $('#colorSlider').val(0);
         $('#degree').text('0°');
-        cropper.rotateTo(0);
     });
 
     $('#colorSlider').on('input', function () {
-        const angle = parseFloat($(this).val()) || 0;
+        const rawAngle = parseFloat($(this).val()) || 0;
+        const relativeAngle = Math.max(-45, Math.min(45, rawAngle));
+        const totalRotation = baseRotation + relativeAngle;
+        storeAngle = totalRotation;
 
-        // Clamp angle to -360° to 360°
-        const rotationAngle = Math.max(-360, Math.min(360, angle));
-        $('#degree').html(`${rotationAngle} &deg;`);
-    
-        // Get container and image data
-        const containerData = cropper.getContainerData();
-        const imageData = cropper.getImageData();
-    
-        // Calculate the base scale
-        const baseScale = Math.min(
-            containerData.width / imageData.naturalWidth,
-            containerData.height / imageData.naturalHeight
-        );
-    
-        // Zoom factor based on rotation
-        const zoomFactor = 1 + Math.abs(rotationAngle) / 90;
-    
-        // Final scale combines base scale and zoom factor
-        const finalScale = baseScale * zoomFactor;
-    
-        // Set rotation and scale
-        cropper.rotateTo(rotationAngle);
-        cropper.scale(finalScale);
-    
-        let percent = ((rotationAngle + 45) / 90) * 100; // Normalize -45° to 45° to 0% to 100%
-        if (rotationAngle < 0) {
-            // Rotate left: Sky blue on the left, grey on the right
-            this.style.setProperty('--slider-color-left', `hsl(200, 100%, 70%)`); // Sky blue
-            this.style.setProperty('--slider-color-right', `hsl(0, 0%, 75%)`);    // Grey
+        $('#degree').html(`${relativeAngle} &deg;`);
+
+        const cropper = window.cropper;
+        if (!cropper) return;
+
+        cropper.rotateTo(totalRotation);
+        const absAngle = Math.abs(relativeAngle);
+        // cropper.scale(1 / currentScale);
+        if (absAngle > 5 || !isFirstMovement) {
+            const zoomFactor = 1 + (absAngle / 44) * 0.5; // Adjust 0.5 for stronger/weaker zoom
+            cropper.zoomTo(zoomFactor);
+            currentZoomLevel = zoomFactor;
+            isFirstMovement = false;
+        }
+
+        // scaleImageToFillAfterRotation(cropper)
+
+        // Slider color feedback
+        if (relativeAngle < 0) {
+            this.style.setProperty('--slider-color-left', `hsl(200, 100%, 70%)`);
+            this.style.setProperty('--slider-color-right', `hsl(0, 0%, 75%)`);
         } else {
-            // Rotate right: Grey on the left, sky blue on the right
-            this.style.setProperty('--slider-color-left', `hsl(0, 0%, 75%)`);    // Grey
-            this.style.setProperty('--slider-color-right', `hsl(200, 100%, 70%)`); // Sky blue
+            this.style.setProperty('--slider-color-left', `hsl(0, 0%, 75%)`);
+            this.style.setProperty('--slider-color-right', `hsl(200, 100%, 70%)`);
+        }
+        
+    });
+
+    $('#colorSlider').on('change', function() {
+        if (parseFloat($(this).val()) === 0) {
+            isFirstMovement = true;
         }
     });
+
 }
 
 function uploadImage(files) {
-    $image = ''; 
+    $image = '';
     if (!files || files.length === 0) {
         alert('No file selected.');
         return;
@@ -175,92 +222,116 @@ function uploadImage(files) {
         },
         error: function () {
             alert('Error uploading file. Please try again.');
-            $('#progressLoadingImg').addClass('hidden'); // Hide loader
+            $('#progressLoadingImg').addClass('hidden');
         },
     });
 }
 
+function trimCanvas(c) {
+    const ctx = c.getContext('2d');
+    const w = c.width;
+    const h = c.height;
+    const imageData = ctx.getImageData(0, 0, w, h).data;
+
+    let minX = w, minY = h, maxX = 0, maxY = 0;
+
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const index = (y * w + x) * 4;
+            const alpha = imageData[index + 3];
+            if (alpha > 0) {
+                if (x < minX) minX = x;
+                if (y < minY) minY = y;
+                if (x > maxX) maxX = x;
+                if (y > maxY) maxY = y;
+            }
+        }
+    }
+
+    const trimmedW = maxX - minX + 1;
+    const trimmedH = maxY - minY + 1;
+
+    const trimmed = document.createElement('canvas');
+    trimmed.width = trimmedW;
+    trimmed.height = trimmedH;
+    const trimmedCtx = trimmed.getContext('2d');
+    trimmedCtx.drawImage(c, minX, minY, trimmedW, trimmedH, 0, 0, trimmedW, trimmedH);
+
+    return trimmed;
+}
+
 function processImage() {
-    $('#loader-container').css('display', 'flex'); 
+    const cropper = window.cropper;
+    $('#loader-container').css('display', 'flex');
     if (!cropper) {
         console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
         return;
     }
 
-    const rotateRight = parseFloat($('#rotateRight').val()) || 0;
-    const rotateLeft = parseFloat($('#rotateLeft').val()) || 0;
-    const straighten = parseFloat($('#colorSlider').val()) || 0;
-
-    const rotation = rotateRight - rotateLeft;
-
     try {
-    cropper.rotateTo(rotation);
+        cropper.rotateTo(storeAngle);
 
-    // Straighten the image (simulating shear/skew effect)
-    let canvas = cropper.getCroppedCanvas();
-    if (straighten !== 0 && canvas) {
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
+        // let canvas = cropper.getCroppedCanvas();
+        const canvas = cropper.getCroppedCanvas({
+            fillColor: 'transparent'
+        });
 
-        const ctx = tempCanvas.getContext('2d');
-        ctx.setTransform(1, straighten / 100, straighten / 100, 1, 0, 0);
-        ctx.drawImage(canvas, 0, 0);
-        canvas = tempCanvas;
-    }
-    console.log($image.attr('src'));
-    let new_Img = $image.attr('src');
-    
-    const relativePath = new_Img.replace(location.origin, '');
-    const extension = relativePath.split('.').pop().toLowerCase();
-    canvas.toBlob(function (blob) {
-        const formData = new FormData();
-        formData.append('rotateImage', blob, `rotate-image.${extension}`);
-        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+        // === REMOVE white space (transparent areas) ===
+        const trimmedCanvas = trimCanvas(canvas);
+        console.log($image.attr('src'));
+        let new_Img = $image.attr('src');
 
-        $.ajax({
-            url: '/save-rotate-image',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                if (data.status === 'success') {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/download-page';
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    const csrfInput = document.createElement('input');
-                    csrfInput.type = 'hidden';
-                    csrfInput.name = '_token';
-                    csrfInput.value = csrfToken;
-                    form.appendChild(csrfInput);
-                    const filenameInput = document.createElement('input');
-                    filenameInput.type = 'hidden';
-                    filenameInput.name = 'filename';
-                    filenameInput.value = data.filename;
-                    form.appendChild(filenameInput);
-                    document.body.appendChild(form);
-                    form.submit();
+        const relativePath = new_Img.replace(location.origin, '');
+        const extension = relativePath.split('.').pop().toLowerCase();
+        trimmedCanvas.toBlob(function (blob) {
+            const formData = new FormData();
+            formData.append('rotateImage', blob, `rotate-image.${extension}`);
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+            $.ajax({
+                url: '/save-rotate-image',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.status === 'success') {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/download-page';
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        const csrfInput = document.createElement('input');
+                        csrfInput.type = 'hidden';
+                        csrfInput.name = '_token';
+                        csrfInput.value = csrfToken;
+                        form.appendChild(csrfInput);
+                        const filenameInput = document.createElement('input');
+                        filenameInput.type = 'hidden';
+                        filenameInput.name = 'filename';
+                        filenameInput.value = data.filename;
+                        form.appendChild(filenameInput);
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                },
+                error: function (err) {
+                    console.error(err);
                 }
-            },
-            error: function (err) {
-                console.error(err);
-            }
+            })
         })
-    })
     } catch (error) {
         console.error("Error applying transformations:", error);
     }
 }
 
 $(document).ready(function () {
-
+    $('#colorSlider').val(0);
+    $('#degree').html('0&deg;');
     $(document).on('click', '#process_data', function () {
         processImage();
     });
     bindRotateEvents()
-    
+
     // bindStraightenSlider()
 
     let cropper = null;
