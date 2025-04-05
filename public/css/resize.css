@@ -1,9 +1,9 @@
-
 /* Hero Section Styling */
 .hero-section {
     background-color: #26bb49;
     /* background: linear-gradient(to bottom left, #26bb49, #ffffff); */
-    color: #333; /* Neutral text color for contrast */
+    color: #333;
+    /* Neutral text color for contrast */
     padding: 100px 20px;
     text-align: center;
     height: 100vh;
@@ -14,7 +14,8 @@
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 10px;
-    color: #ffffff; /* Deep Green */
+    color: #ffffff;
+    /* Deep Green */
 }
 
 .hero-subtitle {
@@ -29,7 +30,8 @@
 }
 
 .hero-btn {
-    background-color: #ffd700; /* Gold */
+    background-color: #ffd700;
+    /* Gold */
     color: #fff;
     padding: 15px 30px;
     font-size: 1.2rem;
@@ -39,7 +41,8 @@
 }
 
 .hero-btn:hover {
-    background-color: #e6c200; /* Darker Gold */
+    background-color: #e6c200;
+    /* Darker Gold */
     text-decoration: none;
 }
 
@@ -54,7 +57,8 @@
     padding: 10px 20px;
     font-size: 1.4rem;
     border-radius: 5px;
-    background-color: #155724; /* Deep Green */
+    background-color: #155724;
+    /* Deep Green */
     color: #fff;
     border: none;
 }
@@ -62,26 +66,31 @@
 .uploadOuter strong {
     font-size: 1.2rem;
     margin: 0 10px;
-    color: #333; /* Neutral color for balance */
+    color: #333;
+    /* Neutral color for balance */
 }
 
 .dragBox {
     display: inline-block;
     padding: 15px 20px;
-    border: 2px dashed #ffd700; /* Gold Border */
+    border: 2px dashed #ffd700;
+    /* Gold Border */
     border-radius: 5px;
-    color: #ffffff; /* Muted Text */
+    color: #ffffff;
+    /* Muted Text */
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .dragBox:hover {
-    background-color: rgba(255, 215, 0, 0.1); /* Light Gold Hover */
+    background-color: rgba(255, 215, 0, 0.1);
+    /* Light Gold Hover */
 }
 
 .dragBox input[type="file"] {
-    display: none; /* Hide the file input */
+    display: none;
+    /* Hide the file input */
 }
 
 /* Responsive Design */
@@ -89,7 +98,7 @@
     .hero-title {
         font-size: 1.8rem;
     }
-    
+
     .hero-subtitle {
         font-size: 0.8rem;
     }
@@ -106,16 +115,17 @@
 }
 
 
-  #preview {
+#preview {
     text-align: center;
+
     img {
-      max-width: 100%
+        max-width: 100%
     }
-  }
+}
 
-  /*Loader photos css*/
+/*Loader photos css*/
 
-  #progressContainer {
+#progressContainer {
     margin: 20px auto;
     width: 40%;
     text-align: center;
@@ -145,6 +155,8 @@
 /*Resize image*/
 .container {
     max-width: 1200px;
+    /* max-height: 100vh; */
+    /* height: 100vh; */
     margin: 0 auto;
     padding: 20px;
 }
@@ -171,8 +183,10 @@ h1 {
 }
 
 .image-section img {
-    width: 100%; /* Make image responsive but not covering the whole container */
-    max-width: 600px; /* Limit the max width */
+    width: 100%;
+    /* Make image responsive but not covering the whole container */
+    max-width: 600px;
+    /* Limit the max width */
     height: auto;
 }
 
@@ -184,6 +198,10 @@ h1 {
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
+    max-height: 100vh;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
 }
 
 .form-section label {
@@ -220,7 +238,8 @@ h1 {
         align-items: center;
     }
 
-    .image-section, .form-section {
+    .image-section,
+    .form-section {
         max-width: 100%;
     }
 }

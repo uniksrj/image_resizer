@@ -28,6 +28,7 @@ a {
 .nav-list {
   display: flex;
   gap: 15px;
+  align-items: center;
 }
 
 .relative:hover .dropdown-content {
@@ -209,6 +210,9 @@ a {
 
   .features-section p {
     font-size: 0.9rem;
+  }
+  .reviews-title{
+    font-size: 2rem;
   }
 }
 

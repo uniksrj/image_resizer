@@ -78,6 +78,8 @@
     padding: 20px;
     border: 1px solid #ddd;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    max-height: 720px;
+    height: 600px;
 }
 
 .tool-item {
@@ -137,6 +139,10 @@ button:hover {
     background-color: #1c638c;
 }
 
+.cropper-wrapper{
+    background-color: #fff !important;
+    height: auto !important;
+}
 
 /*loader*/
 /* Full-screen loader container */
