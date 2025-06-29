@@ -64,9 +64,11 @@ function uploadImage(file) {
             }
         },
         error: function (xhr, status, erro) {
-            console.log(erro);            
+            console.log(erro);       
+            $('#errorMessage').show();     
             $('#errorMessage').text(xhr.responseJSON?.message || 'An error occurred during the upload. Please try again.');
             setTimeout(() => {
+                $('#errorMessage').hide(); 
                 $('#errorMessage').text('');
                 $('#progressContainer').css('display', 'none');
             },2000);
@@ -79,7 +81,7 @@ $(document).ready(function () {
     $('#uploadFile').on('change', function (event) {
         var file = event.target.files[0];
 
-        if (!file) return; // If no file is selected, return
+        if (!file) return; 
 
         // Show the image preview
         var reader = new FileReader();

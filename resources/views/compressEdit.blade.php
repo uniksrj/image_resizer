@@ -4,7 +4,8 @@
     <link rel="stylesheet" href="{{ asset('css/compress.css') }}">
 
     <div class="container">
-        <h3 class="text-3xl font-bold text-green-700 md:font-size[32px] mb-12 text-center ">Compare and Compress Your Image</h3>
+        <h3 class="text-3xl font-bold text-green-700 md:font-size[32px] mb-12 text-center ">Compare and Compress Your Image
+        </h3>
         <div class="d-flex justify-content-center">
             <div class="row w-100" style="max-width: 1200px;">
                 <!-- Image Comparison Section -->
@@ -50,6 +51,11 @@
             </div>
         </div>
     </div>
+    <p class="text-center  mt-4" style="font-size: 14px; color: #666;">
+        <b class="text-base">Note :</b> <span class="text-red-800">compressed image will be displayed after processing. Please wait until the compressed image appears and
+        its size is shown.</span> 
+    </p>
+    <!-- Loader -->
     <div id="loader-container">
         <div id="loader"></div>
     </div>

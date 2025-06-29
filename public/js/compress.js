@@ -1,4 +1,4 @@
-var orig_size; 
+var orig_size;
 function uploadImage(file) {
     var formData = new FormData();
     formData.append('image', file);
@@ -36,17 +36,34 @@ function uploadImage(file) {
         },
         error: function (xhr, status, erro) {
             console.log(erro);
+            $('#errorMessage').show();
             $('#errorMessage').text(xhr.responseJSON?.message || 'An error occurred during the upload. Please try again.');
+            setTimeout(() => {
+                $('#errorMessage').hide();
+                $('#errorMessage').text('');
+                $('#progressContainer').css('display', 'none');
+            }, 2000);
+
         }
     });
 }
 
-$(document).ready(function () {    
+function showLoader() {
+    document.getElementById('loader-container').style.display = 'flex';
+}
+
+function hideLoader() {
+    document.getElementById('loader-container').style.display = 'none';
+}
+
+$(document).ready(function () {
+    
     $('#original_size').text(orig_size);
     let selectedFile = null;
     // Handle image drag and drop event
     $('#uploadFile').on('change', function (event) {
         $('#progressContainer').hide();
+        $('#errorMessage').hide();
         $('#errorMessage').text("");
         var file = event.target.files[0];
 
@@ -62,19 +79,11 @@ $(document).ready(function () {
 
         $('#progressContainer').show();
         uploadImage(file);
-    });  
-    
+    });
+
 
     const originalImagePath = $('#originalImage').attr('src');
     let compressedBlob = null;
-
-    function showLoader() {
-        $('#loaderOverlay').css('display', 'flex');
-    }
-
-    function hideLoader() {
-        $('#loaderOverlay').fadeOut();
-    }
 
     $('#compressionRate').on('input', function () {
         const quality = parseFloat($(this).val());
@@ -148,7 +157,7 @@ $(document).ready(function () {
             return;
         }
         console.log(compressedBlob);
-        
+
         const link = new URL(originalImagePath);
         const pathname = link.pathname;
         const extension = pathname.split('.').pop().toLowerCase();
@@ -162,8 +171,11 @@ $(document).ready(function () {
             data: formData,
             processData: false,
             contentType: false,
+            beforeSend: function () {
+                showLoader();
+            },
             success: function (response) {
-                console.log(response);                
+                console.log(response);
                 if (response.status === 'success') {
                     const form = document.createElement('form');
                     form.method = 'POST';

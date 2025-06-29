@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/flip.css') }}">
     <div class="container mx-auto min-h-[992px] max-h-[992px] flex flex-col md:flex-row py-0">
         <!-- Sidebar -->
-        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white relative p-2">
+        <aside class="w-full md:w-1/4 bg-green-300 shadow text-white relative p-2 transition-all duration-300 transform md:translate-x-0 -translate-x-full md:block" id="sidebar">
             <div class="block w-full pt-3">
                 <h4 class="text-2xl sans font-bold">Flip Image</h4>
             </div>
@@ -92,9 +92,16 @@
                 <div></div>
             </div>
         </main>
+         <div class="absolute bottom-0 left-0 right-0 flex justify-center pb-2 md:hidden">
+        <button id="sidebarSlider" class="w-24 h-8 bg-green-500 rounded-t-lg shadow-lg text-white flex items-center justify-center">
+            <svg id="sliderIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+    </div>
         <div id="loader-container">
             <div id="loader"></div>
-        </div>  
+        </div>
     </div>
     <script type="module" src="{{ asset('js/flip.js') }}"></script>
 @endsection

@@ -31,7 +31,22 @@
             <span id="progressText"
                 style="display: block; margin-top: 10px; font-size: 14px; font-weight: bold;">Uploading...</span>
         </div>
-        <div id="errorMessage" style="color: red; font-weight: bold; text-align: center; margin-top: 10px;"></div>
+        {{-- <div id="errorMessage" style="color: red; font-weight: bold; text-align: center; margin-top: 10px;"></div> --}}
+        <div id="errorMessage"
+            style="color: #ffffff; 
+            display: none; 
+            width: 80%; 
+            max-width: 500px; 
+            background-color: #d00619;
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            font-weight: 800; 
+            text-align: center; 
+            padding: 12px; 
+            margin: 10px auto; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);">
+        </div>
     </section>
 @endsection
 

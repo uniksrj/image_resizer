@@ -37,7 +37,14 @@ function uploadImage(file) {
         },
         error: function (xhr, status, erro) {
             console.log(erro);
+            $('#errorMessage').show();
+            $('#progressContainer').hide();
             $('#errorMessage').text(xhr.responseJSON?.message || 'An error occurred during the upload. Please try again.');
+            setTimeout(() => {
+                $('#errorMessage').hide();
+                $('#errorMessage').text('');
+                $('#progressContainer').css('display', 'none');
+            }, 2000);
         }
     });
 }
@@ -60,6 +67,7 @@ $(document).ready(function () {
     }
     // Handle image drag and drop event
     $('#uploadFile').on('change', function (event) {
+
         var file = event.target.files[0];
 
         if (!file) return; // If no file is selected, return
@@ -78,12 +86,12 @@ $(document).ready(function () {
 
     // new image crop 
     try {
-        const image = document.getElementById('image'); 
+        const image = document.getElementById('image');
         if (!image) {
             throw new Error("Image element not found in the DOM.");
         }
 
-        cropper = new Cropper(image, {  
+        cropper = new Cropper(image, {
             viewMode: 2,
             responsive: true,
             autoCropArea: 0.8,
@@ -196,8 +204,16 @@ $(document).ready(function () {
                     }
                 },
                 error: function (err) {
-                    console.error(err);
                     hideLoader();
+                    console.error("Upload failed:", err);
+
+                    const errorMsg = err.responseJSON?.message || "Upload failed. Please try again.";
+                    $('#errorMessage').text(errorMsg).fadeIn(300);
+                    
+                    setTimeout(() => {
+                        $('#errorMessage').fadeOut(300);
+                    }, 3000);
+
                 }
             })
         })

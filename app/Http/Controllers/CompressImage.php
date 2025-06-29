@@ -15,7 +15,7 @@ class CompressImage extends Controller
     }
     public function compressimage(Request $request){
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
         $path = $request->file('image')->store('tmp', 'public');
 
@@ -43,7 +43,7 @@ class CompressImage extends Controller
 
     public function saveCompressImage(Request $request){
         $request->validate([
-            'compressedImage' => 'required|file|mimes:jpeg,png,jpg|max:10240', // Max size 5MB
+            'compressedImage' => 'required|file|mimes:jpeg,png,jpg',
         ]);
     
         // Handle the uploaded file

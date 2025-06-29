@@ -40,3 +40,18 @@
     87.5% {-webkit-mask-size:0    0  ,0    0  ,0   0   ,var(--s),auto}
     100%  {-webkit-mask-size:0    0  ,0    0  ,0   0   ,0   0   ,auto}
   }
+
+   #sidebar {
+        transition: height 0.3s ease;
+    }
+    #sidebarContent {
+        transition: opacity 0.2s ease;
+    }
+    @media (min-width: 768px) {
+        #sidebarSlider {
+            display: none;
+        }
+        #sidebarContent {
+            opacity: 100 !important;
+        }
+    }
