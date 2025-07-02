@@ -1,57 +1,231 @@
-/* HTML: <div class="loader"></div> */
-#loader-container{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ensure it's above other elements */
-    display: none; /* Initially hidden */
+/* Enhanced Loader Animation */
+#loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  display: none;
 }
 
 #loader {
-    width: 48px;
-    height: 48px;
-    background:#3FD97F;
-    --c:no-repeat linear-gradient(#000 0 0);
-    --s:18px 18px;
-    -webkit-mask:
-      var(--c) left  4px top    4px,
-      var(--c) right 4px top    4px,
-      var(--c) right 4px bottom 4px,
-      var(--c) left  4px bottom 4px,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;
-            mask-composite:exclude;
-    animation: l5 1.5s infinite;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(45deg, #10b981, #06d6a0);
+  --c: no-repeat linear-gradient(#000 0 0);
+  --s: 18px 18px;
+  -webkit-mask: var(--c) left 4px top 4px, var(--c) right 4px top 4px, var(--c) right 4px bottom 4px, var(--c) left 4px
+    bottom 4px, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: l5 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes l5 {
+  0% {
+    -webkit-mask-size: 0 0, 0 0, 0 0, 0 0, auto;
   }
-  @keyframes l5 {
-    0%    {-webkit-mask-size:0    0  ,0    0  ,0    0  ,0    0  ,auto}
-    12.5% {-webkit-mask-size:var(--s),0    0  ,0    0  ,0    0  ,auto}
-    25%   {-webkit-mask-size:var(--s),var(--s),0    0  ,0    0  ,auto}
-    37.5% {-webkit-mask-size:var(--s),var(--s),var(--s),0    0  ,auto}
-    50%   {-webkit-mask-size:var(--s),var(--s),var(--s),var(--s),auto}
-    62.5% {-webkit-mask-size:0    0  ,var(--s),var(--s),var(--s),auto}
-    75%   {-webkit-mask-size:0    0  ,0    0  ,var(--s),var(--s),auto}
-    87.5% {-webkit-mask-size:0    0  ,0    0  ,0   0   ,var(--s),auto}
-    100%  {-webkit-mask-size:0    0  ,0    0  ,0   0   ,0   0   ,auto}
+  12.5% {
+    -webkit-mask-size: var(--s), 0 0, 0 0, 0 0, auto;
+  }
+  25% {
+    -webkit-mask-size: var(--s), var(--s), 0 0, 0 0, auto;
+  }
+  37.5% {
+    -webkit-mask-size: var(--s), var(--s), var(--s), 0 0, auto;
+  }
+  50% {
+    -webkit-mask-size: var(--s), var(--s), var(--s), var(--s), auto;
+  }
+  62.5% {
+    -webkit-mask-size: 0 0, var(--s), var(--s), var(--s), auto;
+  }
+  75% {
+    -webkit-mask-size: 0 0, 0 0, var(--s), var(--s), auto;
+  }
+  87.5% {
+    -webkit-mask-size: 0 0, 0 0, 0 0, var(--s), auto;
+  }
+  100% {
+    -webkit-mask-size: 0 0, 0 0, 0 0, 0 0, auto;
+  }
+}
+
+/* Mobile Toolbox Animations */
+#mobileToolbox.show {
+  transform: translateY(0) !important;
+}
+
+#mobileBackdrop.show {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+/* Enhanced Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+    min-height: 100vh;
   }
 
-   #sidebar {
-        transition: height 0.3s ease;
+  /* Touch-friendly interactions */
+  button {
+    min-height: 48px;
+    min-width: 48px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Improved mobile image container */
+  #dynamic_img {
+    min-height: calc(100vh - 7rem);
+    padding: 1rem;
+  }
+
+  /* Mobile toolbox specific styles */
+  #mobileToolbox {
+    border-top: 4px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Enhanced mobile button states */
+  button:active {
+    transform: scale(0.95);
+  }
+
+  /* Mobile-specific hover states (for devices that support hover) */
+  @media (hover: hover) {
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
-    #sidebarContent {
-        transition: opacity 0.2s ease;
-    }
-    @media (min-width: 768px) {
-        #sidebarSlider {
-            display: none;
-        }
-        #sidebarContent {
-            opacity: 100 !important;
-        }
-    }
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+.cursor-pointer {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced button states */
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Progress bar enhancements */
+#progressBar,
+#progressBarMobile {
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+/* Image transformation animations */
+#uploadedImage {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Backdrop blur support */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+
+  #mobileBackdrop {
+    backdrop-filter: blur(4px);
+  }
+
+  #loader-container {
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Active button states for flip controls */
+.flip-active {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.flip-active i {
+  color: #1d4ed8 !important;
+  transform: scale(1.1);
+}
+
+/* Drag and drop states */
+.drag-over {
+  background: rgba(34, 197, 94, 0.1) !important;
+  border-color: rgba(34, 197, 94, 0.5) !important;
+  transform: scale(1.02);
+}
+
+/* Responsive container queries */
+@container (max-width: 480px) {
+  .grid-cols-2 {
+    gap: 0.75rem;
+  }
+
+  button {
+    font-size: 0.875rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling for mobile toolbox */
+#mobileToolbox .overflow-y-auto {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar for mobile toolbox */
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
