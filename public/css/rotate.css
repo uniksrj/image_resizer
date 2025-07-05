@@ -1,53 +1,306 @@
-@media (max-width: 768px) {
-    aside {
-        width: 100%;
-    }
-    main {
-        width: 100%;
-    }
+/* Mobile Toolbox Animations */
+#mobileToolbox.show {
+  transform: translateY(0) !important;
+  top: 150px !important;
+  
 }
+
+#mobileBackdrop.show {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+/* Responsive Design Fixes */
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ensure mobile toolbox doesn't overflow */
+  #mobileToolbox {
+    max-width: 100vw;
+    left: 0;
+    right: 0;
+    /* top: 150px */
+  }
+  
+  #mobileToolbox * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+  /* Touch-friendly interactions */
+  button {
+    min-height: 48px;
+    min-width: 48px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Improved mobile image container */
+  #dynamic_img {
+    min-height: calc(100vh - 7rem);
+    padding: 1rem;
+  }
+
+  /* Mobile toolbox specific styles */
+  #mobileToolbox {
+    border-top: 4px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Enhanced mobile button states */
+  button:active {
+    transform: scale(0.95);
+  }
+
+  /* Mobile-specific hover states (for devices that support hover) */
+  @media (hover: hover) {
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
 /* Custom property for slider value percentage */
 input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 80%;
-    height: 12px;
-    background: linear-gradient(90deg, #007bff 0%, #007bff var(--slider-value), #e0e0e0 var(--slider-value), #e0e0e0 100%);
-    border-radius: 5px;
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(90deg, #007bff 0%, #007bff var(--slider-value), #e0e0e0 var(--slider-value), #e0e0e0 100%);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;  /* Set a smaller size for the thumb */
-    height: 12px;
-    background: white;
-    border: 2px solid #007bff;
-    border-radius: 50%;
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
 }
 
 input[type="range"]::-moz-range-thumb {
-    width: 12px;  /* Smaller thumb size for Firefox */
-    height: 12px;
-    background: white;
-    border: 2px solid #007bff;
-    border-radius: 50%;
-    cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Default slider value for initial state */
-#colorSlider {
-    background: linear-gradient(
-        to right,
-        var(--slider-color-left, hsl(0, 0%, 75%)) 0%,
-        var(--slider-color-right, hsl(0, 0%, 75%)) 100%
-    );
+#colorSlider,
+#colorSliderMobile {
+  background: linear-gradient(
+    to right,
+    var(--slider-color-left, hsl(0, 0%, 75%)) 0%,
+    var(--slider-color-right, hsl(0, 0%, 75%)) 100%
+  );
 }
 
-
-#progressBar {
-    transition: width 0.3s ease-in-out;
+#progressBar,
+#progressBarMobile {
+  transition: width 0.3s ease-in-out;
+  background: linear-gradient(90deg, #007bff, #0056b3);
 }
 
+/* Enhanced button styles for rotation controls */
+#rotateLeft,
+#rotateRight,
+#rotateLeft_mobile,
+#rotateRight_mobile {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+#rotateLeft:hover,
+#rotateRight:hover,
+#rotateLeft_mobile:hover,
+#rotateRight_mobile:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#rotateLeft:active,
+#rotateRight:active,
+#rotateLeft_mobile:active,
+#rotateRight_mobile:active {
+  transform: translateY(0);
+}
+
+/* Process button enhancement */
+#process_data,
+#process_data_mobile {
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+#process_data:hover,
+#process_data_mobile:hover {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+}
+
+#process_data:active,
+#process_data_mobile:active {
+  transform: translateY(0);
+}
+
+/* Reset button styling */
+#resetButton,
+#resetButtonMobile {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#resetButton:hover,
+#resetButtonMobile:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Drag and drop visual feedback */
+#dropZone {
+  transition: all 0.3s ease;
+}
+
+#dropZone:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Slider container styling */
+.slider-container {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading animation enhancement */
+#progressLoadingImg,
+#progressLoadingImgMobile {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Active button states for rotation controls */
+.rotate-active {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.rotate-active i {
+  color: #1d4ed8 !important;
+  transform: scale(1.1);
+}
+
+/* Drag and drop states */
+.drag-over {
+  background: rgba(34, 197, 94, 0.1) !important;
+  border-color: rgba(34, 197, 94, 0.5) !important;
+  transform: scale(1.02);
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling for mobile toolbox */
+#mobileToolbox .overflow-y-auto {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar for mobile toolbox */
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+#mobileToolbox .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Fix navbar interaction issues */
+@media (max-width: 768px) {
+  .modern-header {
+    position: relative; /* Change from sticky to relative on mobile */
+    z-index: 1001; /* Ensure it's above mobile toolbox */
+  }
+
+  /* Ensure mobile nav doesn't interfere with toolbox */
+  .mobile-nav {
+    z-index: 1002; /* Higher than mobile toolbox */
+  }
+
+  .mobile-overlay {
+    z-index: 1001; /* Same as header */
+  }
+
+  /* Prevent body overflow when mobile nav is open */
+  body.mobile-nav-open {
+    overflow: hidden;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+}
+
+/* Responsive container queries */
+@container (max-width: 480px) {
+  .grid-cols-2 {
+    gap: 0.75rem;
+  }
+
+  button {
+    font-size: 0.875rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+}
