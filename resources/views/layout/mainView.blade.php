@@ -20,10 +20,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap"
         rel="stylesheet">
@@ -45,7 +41,6 @@
         -webkit-font-smoothing: auto;
         -moz-osx-font-smoothing: auto;
         letter-spacing: 0.09em;
-        /* font-optical-sizing: auto; */
         font-weight: 400;
         font-style: normal;
         display: flex;
@@ -69,49 +64,137 @@
                 </ul>
             </div>
         @endif
-        <nav class="navbar">
-            <div class="logo">
-                <a href="{{ route('home') }}"><img style="width: 190px; height : 60px;"
-                        src="{{ asset('storage/cut_logo.png') }}" alt="Logo"></a>
-            </div>
-            <div class="menu-toggle block md:hidden cursor-pointer" id="mobile-menu">
-                <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
-                <span class="bar block w-6 h-1 bg-gray-800 mb-1"></span>
-                <span class="bar block w-6 h-1 bg-gray-800"></span>
-            </div>
-
-            <!-- Navigation Menu -->
-            <ul
-                class="nav-list w-full hidden flex-col absolute md:hidden gap-0 top-[87px] left-0 text-white p-2 place-items-end space-y-2 bg-[rgb(25,135,84)]">
-                <li><a href="{{ route('home') }}" class="block">Image Resizer</a></li>
-                <li><a href="{{ route('crop_image') }}" class="block">Crop Image</a></li>
-                <li><a href="{{ route('compress_image') }}" class="block">Image Compressor</a></li>
-                <li><a href="{{ route('tool-view/1') }}" class="block">Rotate Image</a></li>
-                <li><a href="{{ route('flipPage') }}" class="block">Flip Image</a></li>
-                <li><a href="{{ route('converter-page') }}" class="block">Image Converter</a></li>
-                <li><a href="{{ route('exif-page') }}" class="block px-4 py-2">Get meta Details</a></li>
-            </ul>
-
-            <!-- Desktop View -->
-            <ul class="nav-list hidden md:flex md:flex-row space-x-4">
-                <li><a href="{{ route('home') }}">Image Resizer</a></li>
-                <li><a href="{{ route('crop_image') }}">Crop Image</a></li>
-                <li><a href="{{ route('compress_image') }}">Image Compressor</a></li>
-                <li class="dropdown relative">
-                    <button class="dropbtn" onclick="showDropdown(event)">
-                        More <i class="fa fa-caret-down"></i>
-                    </button>
-                    <div
-                        class="dropdown-content w-[100px] hidden absolute top-14 left-[-160px] bg-[rgb(25 135 84)] text-white">
-                        <a href="{{ route('tool-view/1') }}" class="block px-4 py-2">Rotate Image</a>
-                        <a href="{{ route('flipPage') }}" class="block px-4 py-2">Flip Image</a>
-                        <a href="{{ route('converter-page') }}" class="block px-4 py-2">Image Converter</a>
-                        <a href="{{ route('exif-page') }}" class="block px-4 py-2">Get meta Details</a>
+        
+        <!-- Enhanced Header -->
+        <header class="modern-header">
+            <nav class="navbar">
+                <div class="nav-container">
+                    <!-- Logo Section -->
+                    <div class="logo-section">
+                        <a href="{{ route('home') }}" class="logo-link">
+                            <img class="logo-img" src="{{ asset('storage/cut_logo.png') }}" alt="Image Tools Logo">
+                            <div class="logo-text">
+                                <span class="brand-name">Image Tools</span>
+                                <span class="brand-tagline">Professional Editing</span>
+                            </div>
+                        </a>
                     </div>
-                </li>
-            </ul>
-        </nav>
 
+                    <!-- Desktop Navigation -->
+                    <div class="desktop-nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="{{ route('home') }}" class="nav-link">
+                                    <i class="fas fa-expand-arrows-alt nav-icon"></i>
+                                    <span>Resize</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('crop_image') }}" class="nav-link">
+                                    <i class="fas fa-crop nav-icon"></i>
+                                    <span>Crop</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('compress_image') }}" class="nav-link">
+                                    <i class="fas fa-compress nav-icon"></i>
+                                    <span>Compress</span>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <button class="nav-link dropdown-btn" onclick="showDropdown(event)">
+                                    <i class="fas fa-tools nav-icon"></i>
+                                    <span>More Tools</span>
+                                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('tool-view/1') }}" class="dropdown-item">
+                                        <i class="fas fa-redo"></i>
+                                        <span>Rotate Image</span>
+                                    </a>
+                                    <a href="{{ route('flipPage') }}" class="dropdown-item">
+                                        <i class="fas fa-exchange-alt"></i>
+                                        <span>Flip Image</span>
+                                    </a>
+                                    <a href="{{ route('converter-page') }}" class="dropdown-item">
+                                        <i class="fas fa-file-export"></i>
+                                        <span>Convert Format</span>
+                                    </a>
+                                    <a href="{{ route('exif-page') }}" class="dropdown-item">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Image Details</span>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu-btn" id="mobile-menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation -->
+                <div class="mobile-nav" id="mobile-nav">
+                    <div class="mobile-nav-header">
+                        <h3>Navigation</h3>
+                        <button class="mobile-close-btn" id="mobile-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <ul class="mobile-nav-list">
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('home') }}" class="mobile-nav-link">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                <span>Image Resizer</span>
+                            </a>
+                        </li>
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('crop_image') }}" class="mobile-nav-link">
+                                <i class="fas fa-crop"></i>
+                                <span>Crop Image</span>
+                            </a>
+                        </li>
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('compress_image') }}" class="mobile-nav-link">
+                                <i class="fas fa-compress"></i>
+                                <span>Image Compressor</span>
+                            </a>
+                        </li>
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('tool-view/1') }}" class="mobile-nav-link">
+                                <i class="fas fa-redo"></i>
+                                <span>Rotate Image</span>
+                            </a>
+                        </li>
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('flipPage') }}" class="mobile-nav-link">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span>Flip Image</span>
+                            </a>
+                        </li>
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('converter-page') }}" class="mobile-nav-link">
+                                <i class="fas fa-file-export"></i>
+                                <span>Image Converter</span>
+                            </a>
+                        </li>
+                        <li class="mobile-nav-item">
+                            <a href="{{ route('exif-page') }}" class="mobile-nav-link">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Get Meta Details</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Mobile Overlay -->
+                <div class="mobile-overlay" id="mobile-overlay"></div>
+            </nav>
+        </header>
 
         @yield('content')
 
@@ -155,9 +238,6 @@
                         <!-- Display User Reviews -->
                         <div id="reviewsDisplay" class="mt-5">
                             <h4 class="text-center reviews-title">User Reviews</h4>
-                            {{-- <div  id="reviewContainer"  class="review-box">
-                        <p>No reviews yet. Be the first to leave a review!</p>
-                    </div> --}}
                             <div id="testimonialSlider" class="testimonial-slider">
                             </div>
                         </div>
@@ -168,30 +248,207 @@
 
     </div>
 
-    <footer class="footer bg-success text-white py-2">
-        <div class="container">
-            <div class="text-center">
+    <!-- Enhanced Footer -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <!-- Main Footer Content -->
+            <div class="footer-main">
+                <div class="footer-grid">
+                    <!-- Company Info -->
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ asset('storage/cut_logo.png') }}" alt="Image Tools" class="footer-logo-img">
+                            <h3 class="footer-brand">Image Tools</h3>
+                        </div>
+                        <p class="footer-description">
+                            Your all-in-one solution for professional image editing. Resize, crop, compress, and transform your images with ease.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="social-link" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
 
-                <p class="mb-0 md:font-size[10px]">© <?php echo date('Y'); ?> Image Tools. Your all-in-one solution for
-                    compression, rotation, metadata, and more!</p>
+                    <!-- Quick Tools -->
+                    <div class="footer-section">
+                        <h4 class="footer-title">Quick Tools</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ route('home') }}" class="footer-link">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                Image Resizer
+                            </a></li>
+                            <li><a href="{{ route('crop_image') }}" class="footer-link">
+                                <i class="fas fa-crop"></i>
+                                Crop Image
+                            </a></li>
+                            <li><a href="{{ route('compress_image') }}" class="footer-link">
+                                <i class="fas fa-compress"></i>
+                                Image Compressor
+                            </a></li>
+                            <li><a href="{{ route('flipPage') }}" class="footer-link">
+                                <i class="fas fa-exchange-alt"></i>
+                                Flip Image
+                            </a></li>
+                        </ul>
+                    </div>
+
+                    <!-- More Tools -->
+                    <div class="footer-section">
+                        <h4 class="footer-title">More Tools</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ route('tool-view/1') }}" class="footer-link">
+                                <i class="fas fa-redo"></i>
+                                Rotate Image
+                            </a></li>
+                            <li><a href="{{ route('converter-page') }}" class="footer-link">
+                                <i class="fas fa-file-export"></i>
+                                Image Converter
+                            </a></li>
+                            <li><a href="{{ route('exif-page') }}" class="footer-link">
+                                <i class="fas fa-info-circle"></i>
+                                Image Details
+                            </a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="footer-section">
+                        <h4 class="footer-title">Features</h4>
+                        <ul class="footer-features">
+                            <li class="footer-feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Free to Use</span>
+                            </li>
+                            <li class="footer-feature">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Secure Processing</span>
+                            </li>
+                            <li class="footer-feature">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Mobile Friendly</span>
+                            </li>
+                            <li class="footer-feature">
+                                <i class="fas fa-bolt"></i>
+                                <span>Fast & Reliable</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright">
+                        <p>&copy; <?php echo date('Y'); ?> Image Tools. All rights reserved.</p>
+                    </div>
+                    <div class="footer-bottom-links">
+                        <a href="#" class="footer-bottom-link">Privacy Policy</a>
+                        <a href="#" class="footer-bottom-link">Terms of Service</a>
+                        <a href="#" class="footer-bottom-link">Contact Us</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
-
     <script type="module" src="{{ asset('js/nav.js') }}"></script>
+    
     <script>
+        // Enhanced dropdown functionality
         function showDropdown(event) {
-            const dropdownContent = document.querySelector('.dropdown-content');
-            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+            event.stopPropagation();
+            const dropdownMenu = event.target.closest('.dropdown').querySelector('.dropdown-menu');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+            
+            // Close all other dropdowns
+            allDropdowns.forEach(menu => {
+                if (menu !== dropdownMenu) {
+                    menu.classList.remove('show');
+                }
+            });
+            
+            // Toggle current dropdown
+            dropdownMenu.classList.toggle('show');
         }
-        window.onclick = function(e) {
-            const dropdownContent = document.querySelector('.dropdown-content');
-            if (!e.target.matches('.dropbtn')) {
-                dropdownContent.style.display = 'none';
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
             }
-        };
-        document.getElementById('mobile-menu').addEventListener('click', function() {
-            document.querySelector('.nav-list').classList.toggle('hidden');
+        });
+
+        // Mobile menu functionality - UNIFIED APPROACH
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu');
+            const mobileNav = document.getElementById('mobile-nav');
+            const mobileOverlay = document.getElementById('mobile-overlay');
+            const mobileCloseBtn = document.getElementById('mobile-close');
+
+            function openMobileMenu() {
+                mobileNav.classList.add('active');
+                mobileOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('mobile-nav-open');
+            }
+
+            function closeMobileMenu() {
+                mobileNav.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('mobile-nav-open');
+            }
+
+            // Event listeners
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openMobileMenu();
+                });
+            }
+
+            if (mobileCloseBtn) {
+                mobileCloseBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMobileMenu();
+                });
+            }
+
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeMobileMenu();
+                });
+            }
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            // Handle escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeMobileMenu();
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                }
+            });
         });
     </script>
 </body>
