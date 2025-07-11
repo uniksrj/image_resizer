@@ -1,4 +1,7 @@
 var $image = $('#uploadedImage');
+const mobileToolbox = document.getElementById("mobileToolbox")
+const mobileBackdrop = document.getElementById("mobileBackdrop")
+const mobileToolsBtn = document.getElementById("mobileToolsBtn")
 function initializeCropper(imageElement) {
     if (window.cropper) {
         window.cropper.destroy();
@@ -63,7 +66,9 @@ function uploadImage(files) {
             $image = $('#uploadedImage');
             console.log($image);
             initializeCropper($image[0]);
-
+            if (mobileBackdrop) {
+                closeMobileToolbox()
+            }
 
         },
         error: function () {
@@ -74,46 +79,89 @@ function uploadImage(files) {
 }
 
 function generateTable(obj) {
-    let container = $("#dynamic_img"); // Get the div where we will append the table
+    let container = $("#dynamic_img");
 
     // Clear previous content
     container.html('');
-
-    // Create a scrollable container
     let scrollableDiv = $('<div></div>').css({
         "max-height": "780px",
         "overflow-y": "auto",
-        "border": "1px solid #ddd",
-        "padding": "10px"
+        "background-color": "#ffffff",
+        "border-radius": "12px",
+        "box-shadow": "0 4px 12px rgba(0,0,0,0.1)",
+        "padding": "15px",
+        "margin": "10px 0"
+    });
+    let table = $('<table></table>').addClass('table-modern').css({
+        "width": "100%",
+        "border-collapse": "separate",
+        "border-spacing": "0 8px",
+        "font-size": "15px"
     });
 
-    // Create a table element
-    let table = $('<table></table>').addClass('table table-bordered').css({
-        "width": "100%", // Ensure full width
-        "border-collapse": "collapse"
-    });
+    const style = `
+        <style>
+            .table-modern thead th {
+                position: sticky;
+                top: 0;
+                background: #1f2937;
+                color: #ffffff;
+                padding: 12px;
+                text-align: left;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+            }
+            .table-modern tbody td {
+                background: #f9fafb;
+                padding: 12px;
+                border-radius: 6px;
+                color: #333;
+            }
+            .table-modern tbody tr {
+                transition: background 0.2s ease;
+            }
+            .table-modern tbody tr:hover td {
+                background: #e5e7eb;
+            }
+            @media (max-width: 600px) {
+                .table-modern thead, .table-modern tbody, .table-modern th, .table-modern td, .table-modern tr {
+                    display: block;
+                }
+                .table-modern thead {
+                    display: none;
+                }
+                .table-modern tbody td {
+                    position: relative;
+                    padding-left: 50%;
+                    margin-bottom: 10px;
+                }
+                .table-modern tbody td::before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 16px;
+                    font-weight: bold;
+                    color: #555;
+                }
+            }
+        </style>
+    `;
+    $('head').append(style); // Append styles once
 
-    // Check if metadata exists
     if (obj.metadata && Object.keys(obj.metadata).length > 0) {
-        // Add table header
-        let thead = $('<thead><tr><th>Key</th><th>Value</th></tr></thead>').css({
-            "position": "sticky",
-            "top": "0",
-            "background": "#f8f9fa",
-            "z-index": "10"
-        });
+        // Table Header
+        let thead = $('<thead><tr><th>Key</th><th>Value</th></tr></thead>');
         table.append(thead);
 
-        // Add table body
+        // Table Body
         let tbody = $('<tbody></tbody>');
 
         $.each(obj.metadata, function (key, value) {
-            if(key != 'SourceFile' && key != 'Directory' && key != 'ExifToolVersion'){
+            if (key !== 'SourceFile' && key !== 'Directory' && key !== 'ExifToolVersion') {
                 let row = $('<tr></tr>');
-                row.append($('<td></td>').text(key).css("border", "1px solid #ddd"));
-                row.append($('<td></td>').text(value).css("border", "1px solid #ddd"));
+                row.append($('<td></td>').attr('data-label', 'Key').text(key));
+                row.append($('<td></td>').attr('data-label', 'Value').text(value));
                 tbody.append(row);
-            }            
+            }
         });
 
         table.append(tbody);
@@ -122,58 +170,165 @@ function generateTable(obj) {
     }
 
     scrollableDiv.append(table);
-
     container.append(scrollableDiv);
-
 }
 
 
+
+
+// Mobile toolbox functionality
+
+if (mobileToolsBtn) {
+    // Mobile toolbox toggle
+    mobileToolsBtn.addEventListener("click", () => {
+        toggleMobileToolbox()
+    })
+}
+if (mobileBackdrop) {
+    mobileBackdrop.addEventListener("click", () => {
+        closeMobileToolbox()
+    })
+}
+
+// Touch gestures for mobile toolbox
+let startY = 0
+let currentY = 0
+let isDragging = false
+if (mobileToolbox) {
+    mobileToolbox.addEventListener("touchstart", (e) => {
+        startY = e.touches[0].clientY
+        isDragging = true
+    })
+
+
+    mobileToolbox.addEventListener("touchmove", (e) => {
+        if (!isDragging) return
+
+        currentY = e.touches[0].clientY
+        const deltaY = currentY - startY
+
+        if (deltaY > 0) {
+            mobileToolbox.style.transform = `translateY(${deltaY}px)`
+        }
+    })
+
+    mobileToolbox.addEventListener("touchend", (e) => {
+        if (!isDragging) return
+
+        const deltaY = currentY - startY
+
+        if (deltaY > 100) {
+            closeMobileToolbox()
+        } else {
+            mobileToolbox.style.transform = "translateY(0)"
+        }
+
+        isDragging = false
+    })
+}
+
+function toggleMobileToolbox() {
+    if (!mobileToolbox || !mobileBackdrop) return
+    mobileToolbox.classList.toggle("show")
+    mobileBackdrop.classList.toggle("show")
+
+    if (mobileToolbox.classList.contains("show")) {
+        mobileToolbox.style.transform = "translateY(0)"
+        document.body.style.overflow = "hidden"
+    } else {
+        mobileToolbox.style.transform = "translateY(100%)"
+        document.body.style.overflow = ""
+    }
+}
+
+function closeMobileToolbox() {
+    if (!mobileToolbox || !mobileBackdrop) return
+    mobileToolbox.classList.remove("show")
+    mobileBackdrop.classList.remove("show")
+    mobileToolbox.style.transform = "translateY(100%)"
+    document.body.style.overflow = ""
+}
+
+// Responsive handling
+function handleResize() {
+    if (window.innerWidth >= 768) {
+        closeMobileToolbox()
+    }
+}
+
+let isUploading = false;
+window.handleFileChange = function (event) {
+    const file = event.target.files[0];
+    if (!file || isUploading) {
+        return;
+    }
+    isUploading = true;
+
+
+    if (["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
+        uploadImage([file]);
+    } else {
+        alert('Invalid file type. Please upload an image (JPEG, PNG, GIF, or WebP).');
+    }
+
+    event.target.value = '';
+    isUploading = false;
+};
+
+window.handleDrop = (event) => {
+    event.preventDefault()
+    const file = event.dataTransfer.files[0]
+    if (file) {
+        uploadImage([file])
+    }
+}
+
+
+window.addEventListener("resize", handleResize)
+
 $(document).ready(function () {
-    $('#dropZone').on('dragover', function (e) {
-        e.preventDefault();
-        $(this).css({
-            'background-color': 'rgb(134 239 172)',
-        });
-    });
+    // Enhanced drag and drop functionality
+    $("#dropZone").on("dragover", function (e) {
+        e.preventDefault()
+        $(this).addClass("drag-over")
+    })
 
-    $('#dropZone').on('dragleave', function () {
-        $(this).css({
-            'background-color': 'rgb(134 239 172)',
-        });
-    });
+    $("#dropZone").on("dragleave", function () {
+        $(this).removeClass("drag-over")
+    })
 
-    $('#dropZone').on('drop', function (e) {
-        e.preventDefault();
-        $(this).css({
-            'background-color': 'rgb(134 239 172)',
-        });
+    $("#dropZone").on("drop", function (e) {
+        e.preventDefault()
+        $(this).removeClass("drag-over")
 
-        const file = e.originalEvent.dataTransfer.files[0];
+        const file = e.originalEvent.dataTransfer.files[0]
         if (file) {
-            uploadImage([file]);
+            uploadImage([file])
         } else {
-            alert('No valid file dropped. Please try again.');
+            alert("No valid file dropped. Please try again.")
         }
-    });
-    let isUploading = false;
-    window.handleFileChange = function (event) {
-        const file = event.target.files[0];
-        if (!file || isUploading) {
-            return;
-        }
-        isUploading = true;
+    })
 
+    $("#mobileToolbox .bg-white\\/10").on("dragover", function (e) {
+        e.preventDefault()
+        $(this).addClass("drag-over")
+    })
 
-        if (['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
-            uploadImage([file]);
+    $("#mobileToolbox .bg-white\\/10").on("dragleave", function () {
+        $(this).removeClass("drag-over")
+    })
+
+    $("#mobileToolbox .bg-white\\/10").on("drop", function (e) {
+        e.preventDefault()
+        $(this).removeClass("drag-over")
+
+        const file = e.originalEvent.dataTransfer.files[0]
+        if (file) {
+            uploadImage([file])
         } else {
-            alert('Invalid file type. Please upload an image (JPEG, PNG, or GIF).');
+            alert("No valid file dropped. Please try again.")
         }
-
-        event.target.value = '';
-        isUploading = false;
-
-    };
+    })
 
     $(document).on('click', '#downloadMetaButton', function () {
         let imageurl = $image[0].src;
@@ -200,7 +355,9 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(response);
                 generateTable(response);
-
+                if (mobileBackdrop) {
+                    closeMobileToolbox()
+                }
 
             },
             error: function (error) {
@@ -216,6 +373,9 @@ $(document).ready(function () {
         const urlObj = new URL(imageurl);
         const filename = urlObj.pathname.split('/').pop();
         window.location.href = `/remove-meta/${filename}`;
+        if (mobileBackdrop) {
+            closeMobileToolbox()
+        }
     });
 
     $(document).on('click', '#locateButton', function () {
@@ -225,13 +385,17 @@ $(document).ready(function () {
         $.ajax({
             url: `/view-location/${filename}`,
             type: "GET",
-            success: function(response) {
-                if(response.error){
+            success: function (response) {
+                if (response.error) {
                     alert(response.error);
                     return;
                 }
-                let obj = JSON.parse(response);                
-                window.open(obj.url, "_blank"); 
+                if (mobileBackdrop) {
+                    closeMobileToolbox()
+                }
+                let obj = JSON.parse(response);
+                window.open(obj.url, "_blank");
+
             }
         });
     });
