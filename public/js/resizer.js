@@ -1,100 +1,136 @@
 
-// document.getElementById('resizeForm').addEventListener('submit', async (e) => {
-//     e.preventDefault();
-//     const formData = new FormData(e.target);
-//     const response = await fetch('/resize-image', {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json'
-//         },
-//         body: formData,
-//     });
-//     const result = await response.json();
-//     console.log(response);
-//     // return false;
-//     if (response.ok) {
-//         document.getElementById('result').innerHTML = `
-//             <p>Image resized successfully!</p>
-//             <img src="${result.url}" alt="Resized Image" class="img-fluid">
-//         `;
-//     } else {
-//         const errorText = await response.text();
-//         console.error('Error response:', errorText);
-//         // document.getElementById('result').innerHTML = `<p>Error: ${result.message}</p>`;
-//     }
-// });
-
-// Function to upload image with AJAX and show progress
 function uploadImage(file) {
-    $('#errorMessage').text('');
-    $('#progressContainer').css('display', 'none');
-    var formData = new FormData();
-    formData.append('image', file);
+    $("#errorMessage").text("").hide()
+    $("#progressContainer").css("display", "none")
+    var formData = new FormData()
+    formData.append("image", file)
 
     $.ajax({
-        url: '/upload-image',
-        type: 'POST',
+        url: "/upload-image",
+        type: "POST",
         data: formData,
         processData: false,
         contentType: false,
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
-        xhr: function () {
-            $('#progressContainer').css('display', 'block');
-            var xhr = new XMLHttpRequest();
-            xhr.upload.onprogress = function (event) {
+        xhr: () => {
+            $("#progressContainer").css("display", "block")
+            var xhr = new XMLHttpRequest()
+            xhr.upload.onprogress = (event) => {
                 if (event.lengthComputable) {
-                    var percent = (event.loaded / event.total) * 100;
-
-                    // Update progress bar
-                    $('#uploadProgressBar').css('width', percent + '%');
-                    $('#progressText').text(Math.round(percent) + '% uploaded');
+                    var percent = (event.loaded / event.total) * 100
+                    $("#uploadProgressBar").css("width", percent + "%")
+                    $("#progressText").text(Math.round(percent) + "% uploaded")
                 }
-            };
-            return xhr;
+            }
+            return xhr
         },
-        success: function (response) {
-            // If upload is successful, redirect to the resize image page
+        success: (response) => {
             if (response.success) {
-                console.log(response);
-                window.location.href = response.path;  
-            } else {    
-                alert('Upload failed. Please try again.');
+                console.log(response)
+                window.location.href = response.path
+            } else {
+                showError("Upload failed. Please try again.")
             }
         },
-        error: function (xhr, status, erro) {
-            console.log(erro);       
-            $('#errorMessage').show();     
-            $('#errorMessage').text(xhr.responseJSON?.message || 'An error occurred during the upload. Please try again.');
-            setTimeout(() => {
-                $('#errorMessage').hide(); 
-                $('#errorMessage').text('');
-                $('#progressContainer').css('display', 'none');
-            },2000);
-        }
-    });
+        error: (xhr, status, error) => {
+            console.log(error)
+            showError(xhr.responseJSON?.message || "An error occurred during the upload. Please try again.")
+        },
+    })
 }
 
-$(document).ready(function () {
-    // Handle image drag and drop event
-    $('#uploadFile').on('change', function (event) {
-        var file = event.target.files[0];
+// Function to show error messages
+function showError(message) {
+    $("#errorMessage").text(message).show()
+    setTimeout(() => {
+        $("#errorMessage").hide().text("")
+        $("#progressContainer").css("display", "none")
+    }, 3000)
+}
 
-        if (!file) return; 
+// Function to handle file selection and preview
+function handleFileSelect(file) {
+    if (!file) return
 
-        // Show the image preview
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var preview = $('#preview');
-            preview.html('<img src="' + e.target.result + '" alt="Image preview" style="max-width: 100%; max-height: 300px;">');
-        };
-        reader.readAsDataURL(file); // Load image as data URL
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+        showError("Please select a valid image file.")
+        return
+    }
 
-        // Show the progress bar while uploading
-        $('#progressContainer').show();
-        uploadImage(file);
-    });
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        showError("File size must be less than 10MB.")
+        return
+    }
 
+    // Show image preview
+    var reader = new FileReader()
+    reader.onload = (e) => {
+        var preview = $("#preview")
+        preview.html(
+            '<img src="' +
+            e.target.result +
+            '" alt="Image preview" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-top: 20px;">',
+        )
+    }
+    reader.readAsDataURL(file)
 
-});
+    // Upload the image
+    uploadImage(file)
+}
+
+// Drag and drop functions
+function drag(event) {
+    event.preventDefault()
+}
+
+function drop(event) {
+    event.preventDefault()
+    var file = event.dataTransfer.files[0]
+    handleFileSelect(file)
+}
+
+$(document).ready(() => {
+    // Handle desktop file input change
+    $("#uploadFile").on("change", (event) => {
+        var file = event.target.files[0]
+        handleFileSelect(file)
+    })
+
+    // Handle mobile file input change
+    $("#uploadFileMobile").on("change", (event) => {
+        var file = event.target.files[0]
+        handleFileSelect(file)
+    })
+
+    // Handle drag and drop on drag box
+    $(".dragBox").on("dragover", function (e) {
+        e.preventDefault()
+        $(this).addClass("drag-over")
+    })
+
+    $(".dragBox").on("dragleave", function (e) {
+        e.preventDefault()
+        $(this).removeClass("drag-over")
+    })
+
+    $(".dragBox").on("drop", function (e) {
+        e.preventDefault()
+        $(this).removeClass("drag-over")
+        var file = e.originalEvent.dataTransfer.files[0]
+        handleFileSelect(file)
+    })
+
+    // Handle click on drag box to open file dialog
+    $(".dragBox").on("click", () => {
+        $("#uploadFile").click()
+    })
+
+    // Handle mobile upload button click
+    $('label[for="uploadFileMobile"]').on("click", () => {
+        $("#uploadFileMobile").click()
+    })
+})
