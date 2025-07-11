@@ -1,38 +1,4 @@
-/* 
-.container-crop {
-    width: 80%;
-    max-width: 1000px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-.image-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.image-container img {
-    max-width: 100%;
-    display: none;
-}
-.btn {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 16px;
-}
-.btn:hover {
-    background-color: #0056b3;
-}
-.error-message {
-    color: red;
-    margin-top: 10px;
-} */
+
 .cropper-wrapper {
     display: flex;
     justify-content: center;
