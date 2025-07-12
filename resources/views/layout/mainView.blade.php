@@ -352,7 +352,7 @@
                     <div class="copyright">
                         <p>&copy; <?php echo date('Y'); ?> Image Tools. All rights reserved.</p>
                     </div>
-                    <div class="footer-bottom-links">
+                    <div class="footer-bottom-links hidden md:flex">
                         <a href="#" class="footer-bottom-link">Privacy Policy</a>
                         <a href="#" class="footer-bottom-link">Terms of Service</a>
                         <a href="#" class="footer-bottom-link">Contact Us</a>
