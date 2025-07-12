@@ -13,40 +13,39 @@ function uploadImage(file) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        xhr: function () {
-            var xhr = new XMLHttpRequest();
-            xhr.upload.onprogress = function (event) {
+        xhr: () => {
+            $("#progressContainer").css("display", "block")
+            var xhr = new XMLHttpRequest()
+            xhr.upload.onprogress = (event) => {
                 if (event.lengthComputable) {
-                    var percent = (event.loaded / event.total) * 100;
-
-                    // Update progress bar
-                    $('#uploadProgressBar').css('width', percent + '%');
-                    $('#progressText').text(Math.round(percent) + '% uploaded');
+                    var percent = (event.loaded / event.total) * 100
+                    $("#uploadProgressBar").css("width", percent + "%")
+                    $("#progressText").text(Math.round(percent) + "% uploaded")
                 }
-            };
-            return xhr;
+            }
+            return xhr
         },
-        success: function (response) {
-            // If upload is successful, redirect to the resize image page
+        success: (response) => {
             if (response.success) {
-                console.log(response);
-                window.location.href = response.path;
+                console.log(response)
+                window.location.href = response.path
             } else {
-                alert('Upload failed. Please try again.');
+                showError("Upload failed. Please try again.")
             }
         },
-        error: function (xhr, status, erro) {
-            console.log(erro);
-            $('#errorMessage').show();
-            $('#progressContainer').hide();
-            $('#errorMessage').text(xhr.responseJSON?.message || 'An error occurred during the upload. Please try again.');
-            setTimeout(() => {
-                $('#errorMessage').hide();
-                $('#errorMessage').text('');
-                $('#progressContainer').css('display', 'none');
-            }, 2000);
-        }
+        error: (xhr, status, error) => {
+            console.log(error)
+            showError(xhr.responseJSON?.message || "An error occurred during the upload. Please try again.")
+        },
     });
+}
+
+function showError(message) {
+    $("#errorMessage").text(message).show()
+    setTimeout(() => {
+        $("#errorMessage").hide().text("")
+        $("#progressContainer").css("display", "none")
+    }, 3000)
 }
 
 function showLoader() {
@@ -57,14 +56,83 @@ function hideLoader() {
     document.getElementById('loader-container').style.display = 'none';
 }
 
+function handleFileSelect(file) {
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+        showError("Please select a valid image file.")
+        return
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        showError("File size must be less than 10MB.")
+        return
+    }
+
+    // Show image preview
+    var reader = new FileReader()
+    reader.onload = (e) => {
+        var preview = $("#preview")
+        preview.html(
+            '<img src="' +
+            e.target.result +
+            '" alt="Image preview" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-top: 20px;">',
+        )
+    }
+    reader.readAsDataURL(file)
+
+    // Upload the image
+    uploadImage(file)
+}
+
+function drag(event) {
+    event.preventDefault()
+}
+
+function drop(event) {
+    event.preventDefault()
+    var file = event.dataTransfer.files[0]
+    handleFileSelect(file)
+}
 $(document).ready(function () {
 
-    function drag() {
-        document.getElementById('uploadFile').parentNode.className = 'draging dragBox';
-    }
-    function drop() {
-        document.getElementById('uploadFile').parentNode.className = 'dragBox';
-    }
+    // Handle desktop file input change
+    $("#uploadFile").on("change", (event) => {
+        var file = event.target.files[0]
+        handleFileSelect(file)
+    })
+
+    // Handle mobile file input change
+    $("#uploadFileMobile").on("change", (event) => {
+        var file = event.target.files[0]
+        handleFileSelect(file)
+    })
+
+    // Handle drag and drop on drag box
+    $(".dragBox").on("dragover", function (e) {
+        e.preventDefault()
+        $(this).addClass("drag-over")
+    })
+
+    $(".dragBox").on("dragleave", function (e) {
+        e.preventDefault()
+        $(this).removeClass("drag-over")
+    })
+
+    $(".dragBox").on("drop", function (e) {
+        e.preventDefault()
+        $(this).removeClass("drag-over")
+        var file = e.originalEvent.dataTransfer.files[0]
+        handleFileSelect(file)
+    })
+
+    // Handle click on drag box to open file dialog
+    $(".dragBox").on("click", () => {
+        $("#uploadFile").click()
+    })
+
     // Handle image drag and drop event
     $('#uploadFile').on('change', function (event) {
 
@@ -95,7 +163,7 @@ $(document).ready(function () {
             viewMode: 2,
             responsive: true,
             autoCropArea: 0.8,
-            aspectRatio: NaN,
+            aspectRatio: Number.NaN,
             autoCrop: true,
             movable: true,
             cropBoxMovable: true,
@@ -146,7 +214,7 @@ $(document).ready(function () {
     }
     // Tool Handlers
     $('#updateCrop').on('click', function () {
-
+        showLoader();
         if (!cropper) {
             console.error("Cropper instance is not initialized. Ensure the Cropper is properly initialized before interacting with it.");
             return;
@@ -178,9 +246,6 @@ $(document).ready(function () {
                 data: formData,
                 processData: false,
                 contentType: false,
-                beforeSend: function () {
-                    showLoader();
-                },
                 success: function (data) {
                     hideLoader();
                     if (data.status === 'success') {
@@ -203,18 +268,19 @@ $(document).ready(function () {
                         form.submit();
                     }
                 },
-                error: function (err) {
-                    hideLoader();
-                    console.error("Upload failed:", err);
+                error: (err) => {
+                    hideLoader()
+                    console.error("Upload failed:", err)
+                    const errorMsg = err.responseJSON?.message || "Upload failed. Please try again."
+                    $("#errorMessage").text(errorMsg).fadeIn(300)
 
-                    const errorMsg = err.responseJSON?.message || "Upload failed. Please try again.";
-                    $('#errorMessage').text(errorMsg).fadeIn(300);
-                    
                     setTimeout(() => {
-                        $('#errorMessage').fadeOut(300);
-                    }, 3000);
-
-                }
+                        $("#errorMessage").fadeOut(300)
+                    }, 3000)
+                },
+                complete: () => {
+                    $("#updateCrop").prop("disabled", false).text("Crop & Save")
+                },
             })
         })
     });
@@ -222,63 +288,84 @@ $(document).ready(function () {
 
 
     $('#crop-x').on('change', function () {
+        if (!cropper) return
         const x = parseFloat(this.value);
         const cropData = cropper.getData();
         cropper.setData({ ...cropData, x });  // Update cropper x position
     });
 
     $('#crop-y').on('change', function () {
+        if (!cropper) return
         const y = parseFloat(this.value);
         const cropData = cropper.getData();
         cropper.setData({ ...cropData, y });  // Update cropper y position
     });
 
     $('#crop-width').on('change', function () {
+        if (!cropper) return
         const width = parseFloat(this.value);
         const cropData = cropper.getData();
         cropper.setData({ ...cropData, width });  // Update cropper width
     });
 
     $('#crop-height').on('change', function () {
+        if (!cropper) return
         const height = parseFloat(this.value);
         const cropData = cropper.getData();
         cropper.setData({ ...cropData, height });  // Update cropper height
     });
 
     $('#crop-rotate').on('change', function () {
+        if (!cropper) return
         const rotate = parseFloat(this.value);
         cropper.rotateTo(rotate);  // Apply rotation to cropper
     });
 
     $('#crop-scale-x').on('change', function () {
+        if (!cropper) return
         const scaleValue = parseFloat(this.value);
         cropper.scaleX(scaleValue);  // Apply scaling on X axis
     });
 
     $('#crop-scale-y').on('change', function () {
+        if (!cropper) return
         const scaleValue = parseFloat(this.value);
         cropper.scaleY(scaleValue);  // Apply scaling on Y axis
     });
 
     // Handle aspect ratio button clicks
     $('.aspect-ratio-btn').on('click', function () {
+        if (!cropper) return
         const aspectRatio = $(this).data('aspect-ratio');  // Get the aspect ratio from the data attribute
 
-        if (aspectRatio === "free") {
-            cropper.setAspectRatio(NaN);  // Set aspect ratio to 0 to make it free (no restriction)
+        if (aspectRatio === undefined || $(this).attr("id") === "free-crop") {
+            cropper.setAspectRatio(Number.NaN)
         } else {
-            cropper.setAspectRatio(aspectRatio);  // Apply fixed aspect ratio
+            cropper.setAspectRatio(aspectRatio)
         }
+        $(".aspect-ratio-btn").removeClass("active")
+        $(this).addClass("active")
     });
 
     // Handle free crop button click
     $('#free-crop').on('click', function () {
+        if (!cropper) return
         cropper.setAspectRatio(NaN);  // Set to free crop mode (no aspect ratio constraint)
     });
 
-    window.addEventListener('resize', () => {
-        cropper.resize(); // Ensures proper adjustment
-    });
+    window.addEventListener("resize", () => {
+        if (cropper) {
+            cropper.resize()
+        }
+    })
+    // Handle orientation change on mobile
+    window.addEventListener("orientationchange", () => {
+        setTimeout(() => {
+            if (cropper) {
+                cropper.resize()
+            }
+        }, 500)
+    })
 
 
 });
