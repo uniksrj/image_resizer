@@ -58,7 +58,7 @@ class CropImageController extends Controller
     public function saveCroppedImage(Request $request)
     {
         $validated = $request->validate([
-            'croppedImage' => 'required|file|mimes:jpeg,png,jpg|max:10240', // Validate image
+            'croppedImage' => 'required|file|mimes:jpeg,png,jpg', // Validate image
         ]);
         // $manager = new ImageManager('imagick');
         // Get the uploaded file
